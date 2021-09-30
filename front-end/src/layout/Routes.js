@@ -10,14 +10,18 @@ import Reservations from "../reservations/Reservations";
 function Routes() {
   return (
     <Switch>
-      <Route exact={true} path="/">
-        <Redirect to={"/dashboard"} />
-      </Route>
+
       <Route exact={true} path="/reservations/new">
         <Reservations />
       </Route>
+      <Route exact={true} path="/reservations">
+          {/* <!-- stuff --> */}
+      </Route>
       <Route path="/dashboard">
         <Dashboard date={today()} />
+      </Route>
+      <Route exact={true} path="/">
+        <Redirect to={"/dashboard"} />
       </Route>
       <Route>
         <NotFound />

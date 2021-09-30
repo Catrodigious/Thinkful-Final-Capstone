@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-
+import { newReservation } from "../utils/api";
+import "./Reservations.css";
 
 function initializeGuests(qtyLimit){
     const guests = [];
@@ -31,8 +32,7 @@ export default function Reservations(){
     const [reservationDate, setReservationDate] = useState(today);
     const [reservationTime, setReservationTime] = useState("17:30");
     const [phoneNumber, setPhoneNumber] = useState("555-555-5555");
-    const [guestQty, setGuestQty] = useState(0);
-
+    const [guestQty, setGuestQty] = useState(1);
 
     const handleNewReservationSubmit = (evt) => {
         evt.preventDefault();
@@ -42,6 +42,12 @@ export default function Reservations(){
         const keys = Object.keys(inputs);
 
         keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
+
+        newReservation(inputs)
+            .then((feedback)=>{
+                console.log("newReservation call called");
+                console.log("feedback: ", feedback);
+            })
     }
 
     const setValues = (evt) => {
@@ -61,10 +67,13 @@ export default function Reservations(){
             case "phoneNumber":
                 setPhoneNumber(evt.target.value);
                 break;
-            case "guestQty":
-                setGuestQty(evt.target.value);
+            default:
                 break;
         }
+    }
+
+    const guestQtyEvt = (qty) => {
+        setGuestQty(qty);
     }
 
     return (
@@ -110,12 +119,12 @@ export default function Reservations(){
                             </div>
                             <div className="row">
                                 <div className="btn-group">
-                                    <button className="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" id="guestQty" aria-expanded="false" style={{border: "1px solid rgba(0,0,0,0.2)"}}>
-                                        1 Guest
+                                    <button className="btn dropdown-toggle dropdown-label" type="button" data-bs-toggle="dropdown" id="guestQty" aria-expanded="false" style={{border: "1px solid rgba(0,0,0,0.2)"}}>
+                                        {guestQty} {(guestQty === 1) ? " guest" : " guests"}
                                     </button>
-                                    <ul className="dropdown-menu col-11">
-                                        {guests.map((guest, index)=><li key={`guest_${index}`} value={index+1}>{guest}</li>)}
-                                    </ul>
+                                    <div className="dropdown-menu col-11">
+                                        {guests.map((guest, index)=><a className="dropdown-item" key={`guest_${index}`} value={index+1} onClick={()=>guestQtyEvt(index+1)}>{guest}</a>)}
+                                    </div>
                                 </div>
                             </div>
                         </div>
