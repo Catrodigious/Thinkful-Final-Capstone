@@ -11,6 +11,12 @@ function create(params){
     });
 }
 
+function get(query){
+    return knex(tableName)
+        .where(query)
+        .select("*");
+}
+
 function list(){
     return knex(tableName)
     .select("*")
@@ -18,5 +24,6 @@ function list(){
 
 module.exports = {
     create,
-    list
+    list,
+    get
 }

@@ -65,12 +65,12 @@ export async function listReservations(params, signal) {
     url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
-    .then(formatReservationDate)
-    .then(formatReservationTime);
+     .then(formatReservationDate)
+     .then(formatReservationTime);
+//   .then((reservations)=>reservations);
 }
 
 export async function newReservation(params, signal){
-  const url = new URL(`${API_BASE_URL}/reservations`);
-
+  const url = `${API_BASE_URL}/reservations`;
   return await axios.post(url, {data: params});
 }

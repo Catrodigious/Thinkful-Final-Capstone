@@ -44,10 +44,10 @@ export default function Reservations(){
         keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
 
         newReservation(inputs)
-            .then((feedback)=>{
-                console.log("newReservation call called");
-                console.log("feedback: ", feedback);
-            })
+        .then((feedback)=>{
+            console.log("newReservation call called");
+            console.log("feedback: ", feedback);
+        })
     }
 
     const setValues = (evt) => {
