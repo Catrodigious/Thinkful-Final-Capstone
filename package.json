@@ -50,7 +50,8 @@
   "license": "UNLICENSED",
   "dependencies": {
     "browserslist": "^4.17.3",
-    "cross-env": "^7.0.3"
+    "cross-env": "^7.0.3",
+    "knex": "^0.95.11"
   },
   "devDependencies": {
     "graceful-fs": "^4.2.8"

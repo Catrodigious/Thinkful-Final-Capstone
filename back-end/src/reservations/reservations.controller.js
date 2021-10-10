@@ -1,50 +1,29 @@
 const service = require("./reservations.service");
+const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
+const { validateParams, validateQuery } = require("./reservations.middleware");
 
-async function list(req, res) {
-  const { query=null } = req;
-  let data;
-  if (!query){
-    data = await service.list();
+async function list(req, res, next) {
+    const { date=null } = req.query;
 
-    res.json({
-      data: data
-    });
-  }else{
-    let keys = Object.keys(query);
-    if (keys.length > 1){
-      res.status(501).json({
-        data: "Cannot support multiple queries at the moment"
-      })
-    }
+    const data = await service.list({reservation_date: date});
+    console.log("particular reservation data: ", data);
+    console.log("getting all items in reservation...");
+    const allItems = await service.getAll();
+    console.log("allItems: ", allItems);
 
-    if (keys[0] == "date"){
-      let params = {
-        reservationDate: query.date
-      }
-
-      const reservationData = await service.get(params);
-      res.json({data: reservationData})
-    }
-  }
-
-
+    res.json({data})
 }
 
-async function get(req, res){
-  const { data } = req.params;
-}
-
-async function create(req, res){
+async function create(req, res, next){
   const { data } = req.body;
   const newReservation = await service.create(data);
-  const reservations = await service.list();
-  
-  res.json({
+
+  res.status(201).json({
     data: newReservation
   })
 }
 
 module.exports = {
-  list,
-  create
+  list: [validateQuery, asyncErrorBoundary(list)],
+  create: [validateParams, asyncErrorBoundary(create)]
 };

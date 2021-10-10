@@ -4,26 +4,27 @@ const tableName = "reservations";
 function create(params){
     return knex(tableName)
     .insert(params)
-    .returning("*")
+    .returning('*')
     .then((savedData)=>{
-        console.log("savedData: ", savedData);
+        console.log('savedData: ', savedData);
         return savedData[0];
     });
 }
 
-function get(query){
+function list(query){
+    console.log("query from list: ", query);
     return knex(tableName)
-        .where(query)
-        .select("*");
+    .where(query)
+    .select('*')
+    .orderBy('reservation_time', 'asc');
 }
 
-function list(){
+function getAll(){
     return knex(tableName)
-    .select("*")
 }
 
 module.exports = {
     create,
     list,
-    get
+    getAll
 }
