@@ -47,5 +47,12 @@
   },
   "keywords": [],
   "author": "Thinkful, Inc.",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "dependencies": {
+    "browserslist": "^4.17.3",
+    "cross-env": "^7.0.3"
+  },
+  "devDependencies": {
+    "graceful-fs": "^4.2.8"
+  }
 }
