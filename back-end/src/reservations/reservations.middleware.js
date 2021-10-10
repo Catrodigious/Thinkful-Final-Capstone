@@ -35,27 +35,38 @@ function validateParams(req, res, next){
         })
     }
 
+    const reservationsStart = new Date(data.reservation_date + " " + "10:30");
+    const reservationsEnd = new Date(data.reservation_date + " " + "21:30");
     const dateTimeStr = data.reservation_date + " " + data.reservation_time;
     const prospectiveDate = new Date(data.reservation_date);
     const today = new Date();
-    const dateObj = Date.parse(new Date(dateTimeStr));
+    const dateTimeObj = new Date(dateTimeStr);
 
-    if (!dateObj){
+
+    if (!dateTimeObj){
         return next({
             status: 400,
             message: "the date you chose was invalid; please choose a valid date"
         })
     }
-    if (prospectiveDate < today){
-        return next({
-            status: 400,
-            message: "Please schedule your reservation for a date/time in the future"
-        })
-    }
+
     if (prospectiveDate.getDay() === 1){
         return next({
             status: 400,
             message: "The restaurant is closed on Tuesdays; please choose a different date"
+        })
+    }
+    if (dateTimeObj < reservationsStart || dateTimeObj > reservationsEnd){
+        return next({
+            status:400,
+            message: "The restaurant opens at 10:30am and closes at 10:30pm. Please select a time between 10:30am and 9:30pm"
+        })
+    }
+
+    if (prospectiveDate < today){
+        return next({
+            status: 400,
+            message: "Please schedule your reservation for a date/time in the future"
         })
     }
 
