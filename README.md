@@ -1,6 +1,9 @@
 # Capstone: Restaurant Reservation System
 https://github.com/users/Catrodigious/projects/2
 
+# important --
+  Run this in powershell before starting: `$env:PUPPETEER_EXECUTABLE_PATH='C:\Program Files\Google\Chrome\Application\chrome.exe'`
+
 > You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
 > The software is used only by restaurant personnel when a customer calls to request a reservation.
 > At this point, the customers will not access the system online.
@@ -276,30 +279,31 @@ so that I know which tables are occupied and free.
      - Capacity: `<input name="capacity" />`, this is the number of people that can be seated at the table, which must be at least 1 person.
    - display a `Submit` button that, when clicked, saves the new table then displays the `/dashboard` page
    - display a `Cancel` button that, when clicked, returns the user to the previous page
-1. The `/dashboard` page will:
 
-   - display a list of all reservations in one area.
-   - each reservation in the list will:
-     - Display a "Seat" button on each reservation.
-     - The "Seat" button must be a link with an `href` attribute that equals `/reservations/${reservation_id}/seat`, so it can be found by the tests.
-   - display a list of all tables, sorted by `table_name`, in another area of the dashboard
-     - Each table will display "Free" or "Occupied" depending on whether a reservation is seated at the table.
-     - The "Free" or "Occupied" text must have a `data-table-id-status=${table.table_id}` attribute, so it can be found by the tests.
+2. The `/dashboard` page will:
 
-1. The `/reservations/:reservation_id/seat` page will
-   - have the following required and not-nullable fields:
-     - Table number: `<select name="table_id" />`. The text of each option must be `{table.table_name} - {table.capacity}` so the tests can find the options.
-   - do not seat a reservation with more people than the capacity of the table
-   - display a `Submit` button that, when clicked, assigns the table to the reservation then displays the `/dashboard` page
-   - PUT to `/tables/:table_id/seat/` in order to save the table assignment. The body of the request must be `{ data: { reservation_id: x } }` where X is the reservation_id of the reservation being seated. The tests do not check the body returned by this request.
-   - display a `Cancel` button that, when clicked, returns the user to the previous page
-1. The `tables` table must be seeded with the following data:
-   - `Bar #1` & `Bar #2`, each with a capacity of 1.
-   - `#1` & `#2`, each with a capacity of 6.
-1. The `/tables` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
+   - [ ] display a list of all reservations in one area.
+   - [ ] each reservation in the list will:
+     - [ ] Display a "Seat" button on each reservation.
+     - [ ] The "Seat" button must be a link with an `href` attribute that equals `/reservations/${reservation_id}/seat`, so it can be found by the tests.
+   - [ ] display a list of all tables, sorted by `table_name`, in another area of the dashboard
+     - [ ] Each table will display "Free" or "Occupied" depending on whether a reservation is seated at the table.
+     - [ ] The "Free" or "Occupied" text must have a `data-table-id-status=${table.table_id}` attribute, so it can be found by the tests.
 
-- if the table capacity is less than the number of people in the reservation, return 400 with an error message.
-- if the table is occupied, return 400 with an error message.
+3. The `/reservations/:reservation_id/seat` page will
+   - [ ] have the following required and not-nullable fields:
+     - [ ] Table number: `<select name="table_id" />`. The text of each option must be `{table.table_name} - [ ] {table.capacity}` so the tests can find the options.
+   - [ ] do not seat a reservation with more people than the capacity of the table
+   - [ ] display a `Submit` button that, when clicked, assigns the table to the reservation then displays the `/dashboard` page
+   - [ ] PUT to `/tables/:table_id/seat/` in order to save the table assignment. The body of the request must be `{ data: { reservation_id: x } }` where X is the reservation_id of the reservation being seated. The tests do not check the body returned by this request.
+   - [ ] display a `Cancel` button that, when clicked, returns the user to the previous page
+4. The `tables` table must be seeded with the following data:
+   - [ ] `Bar #1` & `Bar #2`, each with a capacity of 1.
+   - [ ] `#1` & `#2`, each with a capacity of 6.
+5. The `/tables` API will have the same validations as above and will return 400, along with an informative error message, when a validation error happens.
+
+- [ ] if the table capacity is less than the number of people in the reservation, return 400 with an error message.
+- [ ] if the table is occupied, return 400 with an error message.
 
 > **Hint** Work through the acceptance criteria in the order listed, step-by-step. A different order may be more challenging.
 
