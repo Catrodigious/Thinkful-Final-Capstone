@@ -1,6 +1,6 @@
 exports.up = function (knex) {
   return knex.schema.createTable("reservations", (table) => {
-    let params = ["first_name", "last_name", "reservation_date", "reservation_time", "phone_number"];
+    let params = ["first_name", "last_name", "reservation_date", "reservation_time", "mobile_number"];
     table.increments("reservation_id").primary();
     table.integer("people").notNullable();
     params.map((param)=>table.string(param).notNullable());
@@ -11,3 +11,4 @@ exports.up = function (knex) {
 exports.down = function (knex) {
   return knex.schema.dropTable("reservations");
 };
+

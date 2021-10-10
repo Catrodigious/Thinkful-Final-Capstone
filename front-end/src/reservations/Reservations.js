@@ -26,11 +26,9 @@ function getTodaysDate(){
     return `${year}-${monthStr}-${dayStr}`;
 }
 
-
-
 export default function Reservations(){
     const guests = initializeGuests(6);
-    const today = getTodaysDate();
+    const today = new Date();
     const history = useHistory();
 
     const [reservationsError, setReservationsError] = useState(null);
@@ -45,21 +43,21 @@ export default function Reservations(){
         evt.preventDefault();
 
         const inputs = {first_name, last_name, reservation_date, reservation_time, mobile_number, people};
-        
-        if (!validFormInputs(inputs)) return;
+        console.log("validFormInputs(inputs): ", validFormInputs(inputs));
+        if (validFormInputs(inputs)){
 
         const keys = Object.keys(inputs);
         keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
 
         newReservation(inputs)
         .then((feedback)=>{
-            console.log("newReservation call called");
-            console.log("feedback: ", feedback);
-
-            history.push("/dashboard");
+            history.push(`/reservations?date=${reservation_date}`);
             history.go(0);
         })
         .catch(setReservationsError);
+        }else{
+            return;
+        }
     }
 
     const setValues = (evt) => {
@@ -79,51 +77,100 @@ export default function Reservations(){
             case "mobile_number":
                 set_mobile_number(evt.target.value);
                 break;
+            case "people":
+                set_people(evt.target.value);
             default:
                 break;
         }
     }
+    
 
     const validFormInputs = (inputs) => {
         const keys = Object.keys(inputs);
+
+
         for (let n=0; n < keys.length; n++){
             const key = keys[n];
             const value = inputs[key];
             switch(key){
                 case "first_name":
-                    if (!value || value.length < 2 || !isNaN(value)){
-                        setReservationsError({message: "Please provide a first name with at least two alphabetical characters"})
+                    if (!value || value.length < 2){
+                        setReservationsError({message: "Please provide a first name with at least two alphabetical characters"});
+                        return false;
                     }
                     break;
                 case "last_name":
-                    if (!value || value.length < 2 || !isNaN(value)){
+                    if (!value || value.length < 1){
                         setReservationsError({message: "Please provide a last name with at least one alphabetical character"})
+                        return false;
                     }
                     break;
                 case "reservation_date":
-                    const dateInQuestion = new Date(Date.parse(value));
+                    // new Date(Date.parse(date)) seems to return the day before the specified date
+                    // so I'm doing something silly to compensate for that
+                    // let dateArr = value.split("-");
+                    // dateArr[2] = Number(dateArr[2]) + 1;
+                    console.log("reservation_date: ", value)
+                    let dateInQuestion = new Date(Date.parse(value));
                     const dateToday = new Date();
-
-                    console.log("dateInQuestion: ", dateInQuestion);
-                    console.log("dateToday: ", dateToday);
+                    // console.log("dateInQuestion: ", new Date(dateInQuestion));
+                    // console.log("dateToday: ", dateToday);
 
                     if (dateInQuestion < dateToday){
                         setReservationsError({message: "Please select a valid date"});
+                        return false;
+                    }else if (dateInQuestion.getDay() === 1){
+                        setReservationsError({message: "The restaurant is closed on Tuesdays. Please select a different day"})
+                        return false;
                     }
                     break;
                 case "reservation_time":
-                    console.log("reservation_time: ", value);
+                    const timeInQuestion = new Date(reservation_date + " " + value);
+                    const firstReservations = new Date(reservation_date + " " + "10:30:00");
+                    const lastReservations = new Date(reservation_date + " " + "21:30:00");
+                    const timeNow = new Date();
+
+                    
+                    if (timeInQuestion < timeNow){
+                        setReservationsError({message: "Please select a time in the future"})
+                        return false;
+                    }else if (timeInQuestion < firstReservations){
+                        setReservationsError({message: "The restaurant is not accepting reservations at this hour. Please choose a time at or after 10:30am"})
+                        return false;
+                    }else if (timeInQuestion > lastReservations){
+                        setReservationsError({message: "The restaurant is not accepting reservations at this hour. Please choose a time before 9:30pm"})
+                        return false;
+                    }
                     break;
-                // case "mobile_number":
-                //     set_mobile_number(evt.target.value);
-                //     break;
+                case "mobile_number":
+                    if (value.match(/[a-zA-Z]/)){
+                        setReservationsError({message: "Please enter a valid phone number"});
+                        return false;
+                    }
+
+                    let mnParsed = value.split("");
+                    let rawMobile = "";
+                    for (let n=0; n < mnParsed.length; n++){
+                        if (mnParsed[n].match(/[0-9]/)) rawMobile += mnParsed[n];
+                    };
+                    // 10 numbers is the area code + phone number; 11 would be with the country code
+                    if (rawMobile.length < 10 || rawMobile.length > 11){
+                        setReservationsError({message: "Please input a valid phone number"});
+                        return false;
+                    }
+
+                    break;
                 default:
                     break;
             }
         }
+        return true;
     }
 
-    const peopleEvt = (qty) => {
+    const peopleEvt = (evt, qty) => {
+        evt.preventDefault();
+
+        console.log("qty: ", qty);
         set_people(qty);
     }
 
@@ -142,13 +189,13 @@ export default function Reservations(){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="first_name">First Name</label>
-                                <input id="first_name" placeholder="First Name" className="form-control" type="text" defaultValue={first_name} required onChange={setValues} />
+                                <input name="first_name" id="first_name" placeholder="First Name" className="form-control" type="text" defaultValue={first_name} required onChange={setValues} />
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="last_name">Last Name</label>
-                                <input id="last_name" placeholder="Last Name" className="form-control" type="text" defaultValue={last_name} required onChange={setValues} />
+                                <input name="last_name" id="last_name" placeholder="Last Name" className="form-control" type="text" defaultValue={last_name} required onChange={setValues} />
                             </div>
                         </div>
                     </div>
@@ -156,36 +203,27 @@ export default function Reservations(){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="reservation_date">Reservation Date</label>
-                                <input id="reservation_date" className="form-control" type="date" required placeholder={today} defaultValue={today} onChange={setValues} />
+                                <input name="reservation_date" id="reservation_date" className="form-control" type="date" required placeholder={today} defaultValue={today} onChange={setValues} />
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="reservation_time">Reservation Time</label>
-                                <input id="reservation_time" className="form-control" type="time" required defaultValue={reservation_time} onChange={setValues} />
+                                <input name="reservation_time" id="reservation_time" className="form-control" type="time" required defaultValue={reservation_time} onChange={setValues} />
                             </div>
                         </div>
                     </div>
                     <div className="row">
                         <div className="col-6">
-                            <div className="row">
-                                <label>Guests</label>
-                            </div>
-                            <div className="row">
-                                <div className="btn-group">
-                                    <button className="btn dropdown-toggle dropdown-label" type="button" data-bs-toggle="dropdown" id="people" aria-expanded="false" style={{border: "1px solid rgba(0,0,0,0.2)"}}>
-                                        {people} {(people === 1) ? " guest" : " guests"}
-                                    </button>
-                                    <div className="dropdown-menu col-11">
-                                        {guests.map((guest, index)=><a className="dropdown-item" key={`guest_${index}`} value={index+1} href={index+1} onClick={()=>peopleEvt(index+1)}>{guest}</a>)}
-                                    </div>
-                                </div>
+                            <div className="mb-3">
+                                <label htmlFor="people">Qty of Guests</label>
+                                <input name="people" id="people" className="form-control" onChange={setValues} type="number" defaultValue={1}></input>
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="phone">Phone</label>
-                                <input placeholder="555-555-5555" className="form-control" type="tel" defaultValue={mobile_number} />
+                                <input name="mobile_number" id="mobile_number" className="form-control" placeholder={mobile_number} type="tel" onChange={setValues} defaultValue="555-5555" required />
                             </div>
                         </div>
                     </div>

@@ -15,13 +15,14 @@ function Dashboard({ date }) {
   const [nextDate, setNextDate] = useState(new Date());
   const [todaysDate, setTodaysDate] = useState(new Date());
   const [reservationsError, setReservationsError] = useState(null);
+  
   const criteria = {
     reservation_id: "Id",
-    firstName: "First Name",
-    lastName: "Last Name",
-    reservationDate: "Reservation Date",
-    reservationTime: "Reservation Time",
-    phoneNumber: "Phone Number",
+    first_name: "First Name",
+    last_name: "Last Name",
+    reservation_date: "Reservation Date",
+    reservation_time: "Reservation Time",
+    mobile_number: "Mobile Number",
     created_at: "Created At",
     updated_at: "Updated At"
   }
@@ -36,6 +37,7 @@ function Dashboard({ date }) {
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then((data)=>{
+        console.log("data from list reservations: ", data)
         setReservations(data);
       })
       .catch(setReservationsError);
