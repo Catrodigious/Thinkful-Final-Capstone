@@ -14,18 +14,6 @@ function initializeGuests(qtyLimit){
     return guests;
 }
 
-function getTodaysDate(){
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const monthStr = month < 10 ? `0${month}` : String(month);
-    const dayStr = day < 10 ? `0${day}` : String(day);
-
-    return `${year}-${monthStr}-${dayStr}`;
-}
-
 export default function Reservations(){
     const guests = initializeGuests(6);
     const today = new Date();
