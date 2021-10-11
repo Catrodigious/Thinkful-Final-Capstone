@@ -2,14 +2,14 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const { validateParams, validateQuery } = require("./reservations.middleware");
 
-async function list(req, res, next) {
+async function list(req, res) {
     const { date=null } = req.query;
     const data = await service.list({reservation_date: date});
 
     res.json({data})
 }
 
-async function create(req, res, next){
+async function create(req, res){
   const { data } = req.body;
   const newReservation = await service.create(data);
 

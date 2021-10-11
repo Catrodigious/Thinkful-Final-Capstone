@@ -6,7 +6,7 @@ import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
 import ReservationForm from "../reservations/ReservationForm";
 import useQuery from "../utils/useQuery";
-import Tables from "../tables/Tables";
+import TablesForm from "../tables/TablesForm";
 
 function Routes() {
   const query = useQuery();
@@ -15,7 +15,7 @@ function Routes() {
   return (
     <Switch>
       <Route path="/tables/new">
-        <Tables />
+        <TablesForm />
       </Route>
       <Route exact={true} path="/reservations/new">
         <ReservationForm />

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import ErrorAlert from "../layout/ErrorAlert";
 import { useHistory } from "react-router-dom";
+import ErrorAlert from "../layout/ErrorAlert";
 
-export default function Tables(){
+export default function TablesForm(){
     const [reservationsError, setReservationsError] = useState(null);
     const [table_name, set_table_name] = useState("");
     const [capacity, set_capacity] = useState(1);
@@ -16,6 +16,7 @@ export default function Tables(){
                 break;
             case "capacity":
                 set_capacity(evt.target.value);
+                break;
             default:
                 break;
         }
@@ -41,13 +42,13 @@ export default function Tables(){
                     <div className="row">
                         <div className="mb-3">
                             <label htmlFor="capacity">Capacity</label>
-                            <input name="capacity" id="capacity" placeholder={capacity} className="form-control" type="number" defaultValue={table_name} required onChange={setValues} />
+                            <input name="capacity" id="capacity" placeholder={capacity} className="form-control" type="number" min="1" defaultValue={capacity} required onChange={setValues} />
                         </div>
                     </div>
                     <div className="row">
                         <div className="mb-2">
                         <button type="submit" className="btn btn-primary float-end">Submit</button>
-                        <button type="button" className="btn btn-secondary float-end" onClick={()=>history.goBack()}>Cancel</button>
+                        <button type="button" className="btn btn-secondary float-end" onClick={()=> history.goBack()}>Cancel</button>
                         </div>
                     </div>
                 </form>

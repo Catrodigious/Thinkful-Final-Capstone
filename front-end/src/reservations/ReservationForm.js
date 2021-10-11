@@ -31,17 +31,17 @@ export default function Reservations(){
         evt.preventDefault();
 
         const inputs = {first_name, last_name, reservation_date, reservation_time, mobile_number, people};
-        console.log("validFormInputs(inputs): ", validFormInputs(inputs));
+
         if (validFormInputs(inputs)){
 
-        const keys = Object.keys(inputs);
-        keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
+            const keys = Object.keys(inputs);
+            keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
 
-        newReservation(inputs)
-        .then((feedback)=>{
-            history.push(`/dashboard?date=${reservation_date}`);
-        })
-        .catch(setReservationsError);
+            newReservation(inputs)
+            .then((feedback)=>{
+                history.push(`/dashboard?date=${reservation_date}`);
+            })
+            .catch(setReservationsError);
         }else{
             return;
         }
@@ -71,10 +71,8 @@ export default function Reservations(){
         }
     }
     
-
     const validFormInputs = (inputs) => {
         const keys = Object.keys(inputs);
-
 
         for (let n=0; n < keys.length; n++){
             const key = keys[n];

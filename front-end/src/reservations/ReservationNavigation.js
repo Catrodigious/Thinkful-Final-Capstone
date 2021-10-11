@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { getFormalDate } from "../utils/readable-date-time";
 
 export default function ReservationNavigation({date}){
     useEffect(getPreviousAndNextDates, [date]);
@@ -7,6 +8,7 @@ export default function ReservationNavigation({date}){
     const [previousDate, setPreviousDate] = useState(new Date());
     const [nextDate, setNextDate] = useState(new Date());
     const [todaysDate, setTodaysDate] = useState(new Date());
+    const dateLabel = getFormalDate(date);
 
     function getPreviousAndNextDates(){
         const rootDate = new Date(date);
@@ -23,11 +25,13 @@ export default function ReservationNavigation({date}){
     }
 
     return (
-        <div classname="row">
-            <div className="col-4">
-                <h4 >Reservations for {date}</h4>
+
+        <div className="d-flex flex-row row">
+            <div className="col-8 d-flex justify-content-start">
+                <h4>Reservations for {dateLabel}</h4>
             </div>
-            <div className="col-8">
+            <div className="col-4 d-flex align-items-end text-right justify-content-end">
+                <div className="float-right">
                 <Link to={`/dashboard?date=${previousDate}`}>
                 <button type="button" className="btn btn-secondary">
                 &lt; previous
@@ -39,7 +43,9 @@ export default function ReservationNavigation({date}){
                 <Link to={`/dashboard?date=${nextDate}`}>
                 <button type="button" className="btn btn-secondary">next &gt;</button>
                 </Link>
+                </div>
             </div>
         </div>
+
     )
 }
