@@ -51,8 +51,7 @@ export default function Reservations(){
 
         newReservation(inputs)
         .then((feedback)=>{
-            history.push(`/reservations?date=${reservation_date}`);
-            history.go(0);
+            history.push(`/dashboard?date=${reservation_date}`);
         })
         .catch(setReservationsError);
         }else{
@@ -110,7 +109,7 @@ export default function Reservations(){
                     // so I'm doing something silly to compensate for that
                     // let dateArr = value.split("-");
                     // dateArr[2] = Number(dateArr[2]) + 1;
-                    console.log("reservation_date: ", value)
+
                     let dateInQuestion = new Date(Date.parse(value));
                     const dateToday = new Date();
                     // console.log("dateInQuestion: ", new Date(dateInQuestion));

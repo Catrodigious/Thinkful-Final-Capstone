@@ -6,13 +6,11 @@ function create(params){
     .insert(params)
     .returning('*')
     .then((savedData)=>{
-        console.log('savedData: ', savedData);
         return savedData[0];
     });
 }
 
 function list(query){
-    console.log("query from list: ", query);
     return knex(tableName)
     .where(query)
     .select('*')

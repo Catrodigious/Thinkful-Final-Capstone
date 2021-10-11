@@ -4,8 +4,9 @@ import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import { today } from "../utils/date-time";
-import Reservations from "../reservations/Reservations";
+import ReservationForm from "../reservations/ReservationForm";
 import useQuery from "../utils/useQuery";
+import Tables from "../tables/Tables";
 
 function Routes() {
   const query = useQuery();
@@ -13,11 +14,11 @@ function Routes() {
 
   return (
     <Switch>
-      <Route exact={true} path="/reservations/new">
-        <Reservations />
+      <Route path="/tables/new">
+        <Tables />
       </Route>
-      <Route exact={true} path="/reservations">
-          {/* <!-- stuff --> */}
+      <Route exact={true} path="/reservations/new">
+        <ReservationForm />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={ date ? date : today() } />
