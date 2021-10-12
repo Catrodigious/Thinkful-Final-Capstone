@@ -25,7 +25,6 @@ export default function ReservationNavigation({date}){
     }
 
     return (
-
         <div className="d-flex flex-row row">
             <div className="col-8 d-flex justify-content-start">
                 <h4>Reservations for {dateLabel}</h4>

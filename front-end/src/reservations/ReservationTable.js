@@ -1,7 +1,7 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function ReservationsTable({reservations}){
-    
     const criteria = {
     first_name: "First Name",
     last_name: "Last Name",
@@ -10,9 +10,11 @@ export default function ReservationsTable({reservations}){
     created_at: "Created At",
     updated_at: "Updated At"
     }
-    let criteriaDisplay = Object.values(criteria);
-    criteriaDisplay.push("Seat");
     let criteriaKeys = Object.keys(criteria);
+    let criteriaDisplay = Object.values(criteria);
+
+    criteriaDisplay.push("Table");
+
 
     const reservationRows = (reservation) => {
         const { reservation_id = null } = reservation;
@@ -25,7 +27,11 @@ export default function ReservationsTable({reservations}){
         return (
             <tr>
                 {allRows}
-                <td><button type="button" className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>Seat</button></td>
+                <td>
+                    <Link to={`/reservations/${reservation_id}/seat`}>
+                        <button type="button" className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>Seat</button>
+                    </Link>
+                </td>
             </tr>
         )
     }

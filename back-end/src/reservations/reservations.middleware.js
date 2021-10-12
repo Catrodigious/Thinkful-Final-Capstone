@@ -25,7 +25,10 @@ function validateParams(req, res, next){
         }
     }
 
-    if (isNaN(data.people) || 
+    console.log('date.people: ', data.people, typeof data.people);
+
+    if (typeof data.people != "number" ||
+        isNaN(data.people) || 
         !data.people ||
         data.people === 0){
         return next({
@@ -33,7 +36,15 @@ function validateParams(req, res, next){
             message: "The quantity of people must comprise of at least 1 person"
         })
     }
-    
+
+
+
+    const dateTest = new Date(data.reservation_date) || null;
+
+    if (!dateTest || dateTest == "Invalid Date") return next({
+        status: 400,
+        message: "Please return a valid reservation_date"
+    })
 
     const reservationsStart = new Date(data.reservation_date + " " + "10:30");
     const reservationsEnd = new Date(data.reservation_date + " " + "21:30");
@@ -42,11 +53,11 @@ function validateParams(req, res, next){
     const today = new Date();
     const dateTimeObj = new Date(dateTimeStr);
 
-
-    if (!dateTimeObj){
+    console.log("dateTimeStr: ", dateTimeStr);
+    if (!dateTimeObj || dateTimeObj == "Invalid Date"){
         return next({
             status: 400,
-            message: "the date you chose was invalid; please choose a valid date"
+            message: "the date or time you chose was invalid; please enter a valid reservation_time and reservation_date"
         })
     }
 

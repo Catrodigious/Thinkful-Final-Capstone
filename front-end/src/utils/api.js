@@ -67,13 +67,13 @@ export async function listReservations(params, signal) {
     url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
-    .then((data)=>{
-      const reformattedTime = readableDateAndTime(data);
-      return reformattedTime;
+     .then(formatReservationDate)
+     .then(formatReservationTime);
+    // .then((data)=>{
+    //   const reformattedTime = readableDateAndTime(data);
+    //   return reformattedTime;
 
-    })
-    //  .then(formatReservationDate)
-    //  .then(formatReservationTime);
+    // })
 //   .then((reservations)=>reservations);
 }
 

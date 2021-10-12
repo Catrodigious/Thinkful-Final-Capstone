@@ -20,11 +20,11 @@ export default function Reservations(){
     const history = useHistory();
 
     const [reservationsError, setReservationsError] = useState(null);
-    const [first_name, set_first_name] = useState("Cat");
-    const [last_name, set_last_name] = useState("C");
+    const [first_name, set_first_name] = useState("");
+    const [last_name, set_last_name] = useState("");
     const [reservation_date, set_reservation_date] = useState(today);
     const [reservation_time, set_reservation_time] = useState("17:30");
-    const [mobile_number, set_mobile_number] = useState("555-555-5555");
+    const [mobile_number, set_mobile_number] = useState("");
     const [people, set_people] = useState(1);
 
     const handleNewReservationSubmit = (evt) => {
@@ -36,6 +36,9 @@ export default function Reservations(){
 
             const keys = Object.keys(inputs);
             keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
+
+            // people seems to end up being cast as a string; changing it to a number here
+            inputs.people = Number(inputs.people);
 
             newReservation(inputs)
             .then((feedback)=>{
@@ -65,7 +68,7 @@ export default function Reservations(){
                 set_mobile_number(evt.target.value);
                 break;
             case "people":
-                set_people(evt.target.value);
+                set_people(Number(evt.target.value));
             default:
                 break;
         }
@@ -139,7 +142,7 @@ export default function Reservations(){
                         if (mnParsed[n].match(/[0-9]/)) rawMobile += mnParsed[n];
                     };
                     // 10 numbers is the area code + phone number; 11 would be with the country code
-                    if (rawMobile.length < 10 || rawMobile.length > 11){
+                    if (rawMobile.length < 7 || rawMobile.length > 11){
                         setReservationsError({message: "Please input a valid phone number"});
                         return false;
                     }
@@ -202,13 +205,13 @@ export default function Reservations(){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="people">Qty of Guests</label>
-                                <input name="people" id="people" className="form-control" onChange={setValues} type="number" defaultValue={1}></input>
+                                <input name="people" id="people" className="form-control" onChange={setValues} type="number" defaultValue={people}></input>
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="phone">Phone</label>
-                                <input name="mobile_number" id="mobile_number" className="form-control" placeholder={mobile_number} type="tel" onChange={setValues} defaultValue="555-5555" required />
+                                <input name="mobile_number" id="mobile_number" className="form-control" placeholder={mobile_number} type="tel" onChange={setValues} defaultValue={mobile_number} required />
                             </div>
                         </div>
                     </div>
