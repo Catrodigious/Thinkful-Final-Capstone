@@ -25,8 +25,7 @@ function validateParams(req, res, next){
         }
     }
 
-    if (typeof data.people !== "number" || 
-        isNaN(data.people) || 
+    if (isNaN(data.people) || 
         !data.people ||
         data.people === 0){
         return next({
@@ -34,6 +33,7 @@ function validateParams(req, res, next){
             message: "The quantity of people must comprise of at least 1 person"
         })
     }
+    
 
     const reservationsStart = new Date(data.reservation_date + " " + "10:30");
     const reservationsEnd = new Date(data.reservation_date + " " + "21:30");
