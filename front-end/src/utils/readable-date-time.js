@@ -45,6 +45,8 @@ function getDayOfWeek(day){
             return "Saturday";
         case 7:
             return "Sunday";
+        default:
+            return "";
     }
 }
 
@@ -77,7 +79,6 @@ export function getSimpleTime(unformattedTime){
 
     if (!unformattedTime.includes("am") && !unformattedTime.includes("pm")){
         const splitTime = unformattedTime.split(":");
-        console.log("splitTime: ", splitTime);
         let hour = Number(splitTime[0]);
         const minutes = splitTime[1];
         let meridian = "am";
@@ -88,7 +89,6 @@ export function getSimpleTime(unformattedTime){
         };
 
         const result = `${hour}:${minutes}${meridian}`;
-        console.log("result: ", result);
         return result;
     }
 }

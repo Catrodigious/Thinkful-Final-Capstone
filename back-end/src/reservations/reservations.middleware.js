@@ -25,8 +25,6 @@ function validateParams(req, res, next){
         }
     }
 
-    console.log('date.people: ', data.people, typeof data.people);
-
     if (typeof data.people != "number" ||
         isNaN(data.people) || 
         !data.people ||
@@ -36,8 +34,6 @@ function validateParams(req, res, next){
             message: "The quantity of people must comprise of at least 1 person"
         })
     }
-
-
 
     const dateTest = new Date(data.reservation_date) || null;
 
@@ -53,7 +49,6 @@ function validateParams(req, res, next){
     const today = new Date();
     const dateTimeObj = new Date(dateTimeStr);
 
-    console.log("dateTimeStr: ", dateTimeStr);
     if (!dateTimeObj || dateTimeObj == "Invalid Date"){
         return next({
             status: 400,

@@ -33,10 +33,6 @@ export default function Reservations(){
         const inputs = {first_name, last_name, reservation_date, reservation_time, mobile_number, people};
 
         if (validFormInputs(inputs)){
-
-            const keys = Object.keys(inputs);
-            keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
-
             // people seems to end up being cast as a string; changing it to a number here
             inputs.people = Number(inputs.people);
 
