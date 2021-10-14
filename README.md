@@ -2,7 +2,8 @@
 https://github.com/users/Catrodigious/projects/2
 
 # important --
-  Run this in powershell before starting: `$env:PUPPETEER_EXECUTABLE_PATH='C:\Program Files\Google\Chrome\Application\chrome.exe'`
+##  Run this in powershell before starting: `$env:PUPPETEER_EXECUTABLE_PATH='C:\Program Files\Google\Chrome\Application\chrome.exe'`
+https://github.com/sportradar/aws-azure-login/issues/144
 
 > You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
 > The software is used only by restaurant personnel when a customer calls to request a reservation.
