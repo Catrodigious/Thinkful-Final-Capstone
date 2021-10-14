@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { newTable } from "../utils/api";
 
 export default function TablesForm(){
     const [reservationsError, setReservationsError] = useState(null);
@@ -9,6 +10,31 @@ export default function TablesForm(){
 
     const history = useHistory();
     
+    const validateAndCreateTable = (evt) => {
+        evt.preventDefault();
+
+        if (!table_name || table_name.length === 0){
+            setReservationsError({
+                message: "Please provide a table name"
+            })
+        };
+        
+        if (!capacity || isNaN(capacity) || capacity <= 0){
+            setReservationsError({
+                message: "Please enter a capacity of type number with a value larger than 0"
+            })
+        }
+
+        const tableProps = {table_name, capacity};
+        console.log("tableProps: ", tableProps);
+        newTable(tableProps)
+            .then((data)=>{
+                history.push('/dashboard');
+            })
+            .catch(setReservationsError);
+    }
+
+
     const setValues = (evt) => {
         switch(evt.target.id){
             case "table_name":
@@ -32,7 +58,7 @@ export default function TablesForm(){
                     <ErrorAlert error={reservationsError} />
                 </div>
                 <hr className="mb-3 mt-0" />
-                <form>
+                <form onSubmit={validateAndCreateTable}>
                     <div className="row">
                         <div className="mb-3">
                             <label htmlFor="table_name">Table Name</label>

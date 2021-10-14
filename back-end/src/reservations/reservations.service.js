@@ -17,12 +17,15 @@ function list(query){
     .orderBy('reservation_time', 'asc');
 }
 
-function getAll(){
+function getById(reservation_id){
     return knex(tableName)
+    .where({reservation_id})
+    .then((savedData)=>savedData[0])
+    .catch(()=>{})
 }
 
 module.exports = {
     create,
     list,
-    getAll
+    getById
 }

@@ -7,7 +7,7 @@ export default function TablesList({tables}){
         return (
             <li class="list-group-item d-flex justify-content-between align-items-start" key={index}>
                     <div class="ms-2 me-auto">
-                    <div class="fw-bold">{table.name}</div>
+                    <div class="fw-bold">{table.table_name}</div>
                         Can hold {table.capacity} people
                     </div>
                     {table.availability === "free" ?

@@ -12,11 +12,11 @@ function validateParams(req, res, next){
     ]
 
     const givenParams = Object.keys(data);
-
     // iterate through required params and cross-check against givenParams
     // if givenParams is missing any of the requiredParams, return 400
     for (let n=0; n < requiredParams.length; n++){
         const param = requiredParams[n];
+
         if (!givenParams.includes(param) || !data[param]){
             return next({
                 status: 400,
@@ -46,6 +46,7 @@ function validateParams(req, res, next){
     const reservationsEnd = new Date(data.reservation_date + " " + "21:30");
     const dateTimeStr = data.reservation_date + " " + data.reservation_time;
     const prospectiveDate = new Date(data.reservation_date);
+
     const today = new Date();
     const dateTimeObj = new Date(dateTimeStr);
 
@@ -55,7 +56,6 @@ function validateParams(req, res, next){
             message: "the date or time you chose was invalid; please enter a valid reservation_time and reservation_date"
         })
     }
-
     if (prospectiveDate.getDay() === 1){
         return next({
             status: 400,
@@ -69,7 +69,7 @@ function validateParams(req, res, next){
         })
     }
 
-    if (prospectiveDate < today){
+    if (prospectiveDate.getUTCDay() < today.getUTCDay()){
         return next({
             status: 400,
             message: "Please schedule your reservation for a date/time in the future"

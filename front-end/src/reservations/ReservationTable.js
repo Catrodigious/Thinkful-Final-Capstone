@@ -28,9 +28,9 @@ export default function ReservationsTable({reservations}){
             <tr>
                 {allRows}
                 <td>
-                    <Link to={`/reservations/${reservation_id}/seat`}>
-                        <button type="button" className="btn btn-primary" href={`/reservations/${reservation_id}/seat`}>Seat</button>
-                    </Link>
+                    <a to={`/reservations/${reservation_id}/seat`}  href={`/reservations/${reservation_id}/seat`}>
+                        <button type="button" className="btn btn-primary">Seat</button>
+                    </a>
                 </td>
             </tr>
         )

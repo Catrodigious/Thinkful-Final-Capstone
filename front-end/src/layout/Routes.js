@@ -22,7 +22,7 @@ function Routes() {
         <ReservationForm />
       </Route>
       <Route path="/reservations/:reservation_id/seat">
-        <ReservationSeat />
+        <ReservationSeat date={ date ? date : today() } />
       </Route>
       <Route path="/dashboard">
         <Dashboard date={ date ? date : today() } />

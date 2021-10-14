@@ -77,6 +77,13 @@ export async function listReservations(params, signal) {
 //   .then((reservations)=>reservations);
 }
 
+export async function getReservationById(reservation_id, signal) {
+  const url = new URL(`${API_BASE_URL}/reservations/${reservation_id}`);
+
+  return await fetchJson(url, { headers, signal }, []);
+//   .then((reservations)=>reservations);
+}
+
 export async function newReservation(params, signal){
   const url = `${API_BASE_URL}/reservations`;
   return await axios.post(url, {data: params});
@@ -87,14 +94,23 @@ export async function newTable(params, signal){
   return await axios.post(url, {data: params});
 }
 
-export async function listTables(signal, params={}) {
-  const url = new URL(`${API_BASE_URL}/tables`);
-  
+export async function listTables(params, signal) {
+  let url = API_BASE_URL + "/tables";
+
   if (Object.keys(params).length > 0){
+    url += "?"
     Object.entries(params).forEach(([key, value]) =>
-      url.searchParams.append(key, value.toString())
+      url += key + "=" + value
     );
   }
-
   return await fetchJson(url, { headers, signal }, []);
 };
+
+export async function updateTable(params){
+  const { table_id, reservation_id, availability } = params;
+  const data = {table_id, reservation_id, availability};
+
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+
+  return await axios.put(url, {data});
+}

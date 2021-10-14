@@ -90,23 +90,16 @@ export default function Reservations(){
                     }
                     break;
                 case "reservation_date":
-                    // new Date(Date.parse(date)) seems to return the day before the specified date
-                    // so I'm doing something silly to compensate for that
-                    // let dateArr = value.split("-");
-                    // dateArr[2] = Number(dateArr[2]) + 1;
-
-                    let dateInQuestion = new Date(Date.parse(value));
-                    const dateToday = new Date();
-                    // console.log("dateInQuestion: ", new Date(dateInQuestion));
-                    // console.log("dateToday: ", dateToday);
-
-                    if (dateInQuestion < dateToday){
-                        setReservationsError({message: "Please select a valid date"});
-                        return false;
-                    }else if (dateInQuestion.getDay() === 1){
-                        setReservationsError({message: "The restaurant is closed on Tuesdays. Please select a different day"})
+                    const rDate = value.split('-')[2];
+                    const todaysDate = today.getDate();
+                    
+                    if (rDate < todaysDate){
+                        setReservationsError({
+                            message: "Please select a date in the future"
+                        })
                         return false;
                     }
+
                     break;
                 case "reservation_time":
                     const timeInQuestion = new Date(reservation_date + " " + value);
