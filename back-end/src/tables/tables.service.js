@@ -13,9 +13,11 @@ function list(query={}){
         return knex(tableName)
             .select("*")
             .where(query)
+            .orderBy("table_name")
     }else{ 
         return knex(tableName)
             .select("*")
+            .orderBy("table_name")
     }
 }
 

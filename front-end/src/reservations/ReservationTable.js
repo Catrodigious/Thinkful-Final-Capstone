@@ -17,8 +17,6 @@ export default function ReservationsTable({reservations}){
 
 
     const reservationRows = (reservation) => {
-        const { reservation_id = null } = reservation;
-
         const allRows = criteriaKeys.reduce((rows, key)=>{
             rows.push(<td>{reservation[key]}</td>);
             return rows;
@@ -28,8 +26,8 @@ export default function ReservationsTable({reservations}){
             <tr>
                 {allRows}
                 <td>
-                    <a to={`/reservations/${reservation_id}/seat`}  href={`/reservations/${reservation_id}/seat`}>
-                        <button type="button" className="btn btn-primary">Seat</button>
+                    <a href={`/reservations/${reservation.reservation_id}/seat`}>
+                        <button type="button" className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</button>
                     </a>
                 </td>
             </tr>

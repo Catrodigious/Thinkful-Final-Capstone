@@ -34,7 +34,7 @@ async function update(req, res){
 }
 
 async function updateFinishedTable(req, res){
-    const { table_id } = req.body.data;
+    const { table_id } = req.params;
 
     const data = await tableService.update(null, table_id, "free");
 

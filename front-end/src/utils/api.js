@@ -84,7 +84,7 @@ export async function getReservationById(reservation_id, signal) {
 //   .then((reservations)=>reservations);
 }
 
-export async function newReservation(params, signal){
+export async function createReservation(params, signal){
   const url = `${API_BASE_URL}/reservations`;
   return await axios.post(url, {data: params});
 }

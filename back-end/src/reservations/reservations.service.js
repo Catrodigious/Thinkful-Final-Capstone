@@ -20,7 +20,7 @@ function list(query){
 function getById(reservation_id){
     return knex(tableName)
     .where({reservation_id})
-    .then((savedData)=>savedData[0])
+    .then((savedData) => savedData[0])
     .catch(()=>{})
 }
 

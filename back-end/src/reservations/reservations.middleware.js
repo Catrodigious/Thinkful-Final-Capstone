@@ -69,7 +69,7 @@ function validateParams(req, res, next){
         })
     }
 
-    if (prospectiveDate.getUTCDay() < today.getUTCDay()){
+    if (prospectiveDate.getUTCDay() < today.getUTCDay() && prospectiveDate.getUTCFullYear() <= today.getUTCFullYear()){
         return next({
             status: 400,
             message: "Please schedule your reservation for a date/time in the future"

@@ -5,28 +5,43 @@ import { useParams, useHistory} from "react-router-dom";
 
 
 export default function ReservationSeat({date}){
-    const [tableAssignmentError, setTableAssignmentError] = useState({});
+    const [tableAssignmentError, setTableAssignmentError] = useState(null);
     const [selectedTable, setSelectedTable] = useState({});
     const [tables, setTables] = useState([]);
     const { reservation_id } = useParams();
     const [reservationInfo, setReservationInfo] = useState({});
     const history = useHistory();
 
-    function loadTables() {
+    function loadReservations() {
         const abortController = new AbortController();
-
-        listTables({availability: "free"}, abortController.signal)
-        .then(setTables)
-        .catch(setTableAssignmentError);
     
         getReservationById(reservation_id, abortController.signal)
-        .then(setReservationInfo);
+        .then(setReservationInfo)
+        .catch((err)=>setReservationInfo({message: err}));
 
         return () => abortController.abort();
     }
 
-    useEffect(loadTables, []);
-    
+    function loadTables() {
+        const abortController = new AbortController();
+        console.log("reservationInfo: ", reservationInfo);
+        if (reservationInfo){
+            console.log("reservationInfo: ", reservationInfo.people);
+        
+            listTables({availability: "free"}, abortController.signal)
+            .then((data)=>{
+                setTables(data);
+                // sets table default
+                setSelectedTable(data[0]);
+            })
+            .catch((err)=>setTableAssignmentError({message: err}));
+
+        }
+        return () => abortController.abort();
+    }
+
+    useEffect(loadReservations, []);
+    useEffect(loadTables, [reservationInfo])
 
 
     const handleTableAssignmentSubmit = (evt) => {
@@ -38,7 +53,7 @@ export default function ReservationSeat({date}){
             updateTable(requestBody)
                 .then((data)=>{
                     console.log("table update successful: ", data);
-                    history.push(`/dashboard/date=${date}`)
+                    history.push(`/dashboard?date=${reservationInfo.reservation_date}`)
                     
                 })
                 .catch((error)=>setTableAssignmentError({message: error}))
@@ -58,7 +73,7 @@ export default function ReservationSeat({date}){
     const tableOptions = () => {
         return tables.map((table, index)=>{
             return (
-                <option key={index} value={index} onClick={onTableSelect}>{table.table_name} ({table.capacity} {table.capacity < 2 ? "person" : "people" })</option>
+                <option key={index} value={index} onClick={onTableSelect}>{table.table_name} - {table.capacity}</option>
             )
         })
     }
@@ -78,7 +93,7 @@ export default function ReservationSeat({date}){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="table_select">Table Selection</label>
-                                <select name="table_id" className="form-select form-select-lg mb-3" aria-label=".form-select-lg table-select" onChange={(evt)=>setSelectedTable(evt.target.value)}>
+                                <select name="table_id" className="form-select form-select-lg mb-3" aria-label=".form-select-lg table-select" defaultValue={0} onChange={(evt)=>setSelectedTable(evt.target.value)}>
                                     {tableOptions()}
                                 </select>
                                 <button type="submit" className="btn btn-primary">Submit</button>

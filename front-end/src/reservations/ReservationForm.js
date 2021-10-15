@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { newReservation } from "../utils/api";
+import { createReservation } from "../utils/api";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -36,7 +36,7 @@ export default function Reservations(){
             // people seems to end up being cast as a string; changing it to a number here
             inputs.people = Number(inputs.people);
 
-            newReservation(inputs)
+            createReservation(inputs)
             .then((feedback)=>{
                 history.push(`/dashboard?date=${reservation_date}`);
             })
@@ -90,10 +90,13 @@ export default function Reservations(){
                     }
                     break;
                 case "reservation_date":
-                    const rDate = value.split('-')[2];
-                    const todaysDate = today.getDate();
-                    
-                    if (rDate < todaysDate){
+                    const prospectiveDateTime = new Date(value + "T" + reservation_time);
+                    const prospectiveYear = prospectiveDateTime.getUTCFullYear();
+                    const currentYear = today.getUTCFullYear();
+                    const prospectiveDate = prospectiveDateTime.getUTCDate();
+                    const currentDate = today.getUTCDate();
+
+                    if (prospectiveDate < currentDate && prospectiveYear <= currentYear){
                         setReservationsError({
                             message: "Please select a date in the future"
                         })

@@ -20,8 +20,8 @@ function validateInputs(req, res, next){
         if (!keys.includes(field)){
             return errorCallback(400, `Please include the following field: ${field}`, next);
         } else {
-            if (field === "name"){
-                if (data[field].length < 1){
+            if (field === "table_name"){
+                if (data[field].length < 2){
                     return errorCallback(400, "Please provide a name for the table", next);
                 }
             }else if (field === "capacity"){
@@ -48,7 +48,7 @@ function validateInputs(req, res, next){
 }
 
 async function validateTableId(req, res, next){
-    const { table_id } = req.body.data;
+    const { table_id } = req.params;
 
     if (!table_id || isNaN(table_id)) return errorCallback(400, "Please enter a valid table_id.", next);
 

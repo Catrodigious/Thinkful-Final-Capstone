@@ -6,18 +6,24 @@ import { newTable } from "../utils/api";
 export default function TablesForm(){
     const [reservationsError, setReservationsError] = useState(null);
     const [table_name, set_table_name] = useState("");
-    const [capacity, set_capacity] = useState(1);
+    const [capacity, set_capacity] = useState(0);
 
     const history = useHistory();
     
     const validateAndCreateTable = (evt) => {
         evt.preventDefault();
 
-        if (!table_name || table_name.length === 0){
+        if (!table_name){
             setReservationsError({
                 message: "Please provide a table name"
             })
         };
+
+        if (table_name.length < 2){
+            setReservationsError({
+                message: "Plese provide a table name that is 2 or more characters"
+            })
+        }
         
         if (!capacity || isNaN(capacity) || capacity <= 0){
             setReservationsError({
