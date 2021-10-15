@@ -7,6 +7,7 @@ async function list(req, res) {
   const data = await service.list({reservation_date: date});
 
   res.json({data})
+
 }
 
 async function create(req, res){
@@ -22,7 +23,7 @@ async function getById(req, res) {
   const {reservation_id = null} = req.params;
 
   if (!reservation_id){
-    res.status(400).json({message: "Please provide the ID"})
+    res.status(404).json({message: "Please provide a reservation_id"})
   }
 
   const data = await service.getById(reservation_id) || {};

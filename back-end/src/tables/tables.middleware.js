@@ -22,7 +22,7 @@ function validateInputs(req, res, next){
         } else {
             if (field === "table_name"){
                 if (data[field].length < 2){
-                    return errorCallback(400, "Please provide a name for the table", next);
+                    return errorCallback(400, "Please provide a table_name with at least two characters", next);
                 }
             }else if (field === "capacity"){
                 if (isNaN(data[field]) ||
@@ -61,14 +61,19 @@ async function validateTableId(req, res, next){
 }
 
 async function validateReservationId(req, res, next){
-    const { reservation_id } = req.body.data;
+    const { data = null } = req.body;
     const { table_id } = req.params;
+
+    if (!data) return errorCallback(400, 'data was missing from body', next);
+
+    const { reservation_id } = data;
+    if (!reservation_id) return errorCallback(400, 'reservation_id was missing from body.data', next);
 
     const reservation = await reservationService.getById(reservation_id);
     const table = await tableService.getById(table_id);
 
-    if (!reservation) return errorCallback(400, "This reservation doesn't exist", next); 
-    if (!table) return errorCallback(400, "This table doesn't exist", next);
+    if (!reservation) return errorCallback(404, `reservation_id: ${reservation_id} does not exist`, next); 
+    if (!table) return errorCallback(404, "This table doesn't exist", next);
 
     res.locals.reservation = reservation;
     res.locals.table = table;
@@ -80,7 +85,7 @@ function validateCapacityAndAvailability(req, res, next){
     const table = res.locals.table;
 
     if (table.availability != "free"){
-        return errorCallback(400, "This table is not available - please choose a different table", next);
+        return errorCallback(400, "This table is occupied - please choose a different table", next);
     }
     
     if (reservation.people > table.capacity){
@@ -88,9 +93,6 @@ function validateCapacityAndAvailability(req, res, next){
     }
     next();
 }
-
-
-
 
 module.exports = {
     validateInputs,

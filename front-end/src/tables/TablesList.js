@@ -11,9 +11,9 @@ export default function TablesList({tables}){
                         Can hold {table.capacity} people (table id: {table.table_id})
                     </div>
                     {table.availability === "free" ?
-                        <span className="badge bg-primary rounded-pill" data-table-id-status={`${table.table_id}`}>{table.availability}</span>
+                        <span className="badge bg-primary rounded-pill" data-table-id-status={table.table_id}>{table.availability}</span>
                         :
-                        <span className="badge bg-danger rounded-pill" data-table-id-status={`${table.table_id}`}>{table.availability}</span>
+                        <span className="badge bg-danger rounded-pill" data-table-id-status={table.table_id}>{table.availability}</span>
                     }
                     <h1>{table.availability}</h1>
             </li>

@@ -26,8 +26,8 @@ async function read(req, res){
 
 async function update(req, res){
     const { reservation_id } = res.locals.reservation;
-    const { table_id, availability } = req.body.data;
-
+    const { table_id } = req.params;
+    const availability = "occupied";
     const data = await tableService.update(reservation_id, table_id, availability);
 
     return res.json({data});
