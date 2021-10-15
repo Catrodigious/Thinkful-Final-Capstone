@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { newReservation } from "../utils/api";
+import { createReservation } from "../utils/api";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 
@@ -14,47 +14,33 @@ function initializeGuests(qtyLimit){
     return guests;
 }
 
-function getTodaysDate(){
-    const date = new Date();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const year = date.getFullYear();
-
-    const monthStr = month < 10 ? `0${month}` : String(month);
-    const dayStr = day < 10 ? `0${day}` : String(day);
-
-    return `${year}-${monthStr}-${dayStr}`;
-}
-
 export default function Reservations(){
     const guests = initializeGuests(6);
     const today = new Date();
     const history = useHistory();
 
     const [reservationsError, setReservationsError] = useState(null);
-    const [first_name, set_first_name] = useState("Cat");
-    const [last_name, set_last_name] = useState("C");
+    const [first_name, set_first_name] = useState("");
+    const [last_name, set_last_name] = useState("");
     const [reservation_date, set_reservation_date] = useState(today);
     const [reservation_time, set_reservation_time] = useState("17:30");
-    const [mobile_number, set_mobile_number] = useState("555-555-5555");
+    const [mobile_number, set_mobile_number] = useState("");
     const [people, set_people] = useState(1);
 
     const handleNewReservationSubmit = (evt) => {
         evt.preventDefault();
 
         const inputs = {first_name, last_name, reservation_date, reservation_time, mobile_number, people};
-        console.log("validFormInputs(inputs): ", validFormInputs(inputs));
+
         if (validFormInputs(inputs)){
+            // people seems to end up being cast as a string; changing it to a number here
+            inputs.people = Number(inputs.people);
 
-        const keys = Object.keys(inputs);
-        keys.map((k)=> console.log(`${k}: ${inputs[k]}`));
-
-        newReservation(inputs)
-        .then((feedback)=>{
-            history.push(`/reservations?date=${reservation_date}`);
-            history.go(0);
-        })
-        .catch(setReservationsError);
+            createReservation(inputs)
+            .then((feedback)=>{
+                history.push(`/dashboard?date=${reservation_date}`);
+            })
+            .catch(setReservationsError);
         }else{
             return;
         }
@@ -78,16 +64,14 @@ export default function Reservations(){
                 set_mobile_number(evt.target.value);
                 break;
             case "people":
-                set_people(evt.target.value);
+                set_people(Number(evt.target.value));
             default:
                 break;
         }
     }
     
-
     const validFormInputs = (inputs) => {
         const keys = Object.keys(inputs);
-
 
         for (let n=0; n < keys.length; n++){
             const key = keys[n];
@@ -106,23 +90,19 @@ export default function Reservations(){
                     }
                     break;
                 case "reservation_date":
-                    // new Date(Date.parse(date)) seems to return the day before the specified date
-                    // so I'm doing something silly to compensate for that
-                    // let dateArr = value.split("-");
-                    // dateArr[2] = Number(dateArr[2]) + 1;
-                    console.log("reservation_date: ", value)
-                    let dateInQuestion = new Date(Date.parse(value));
-                    const dateToday = new Date();
-                    // console.log("dateInQuestion: ", new Date(dateInQuestion));
-                    // console.log("dateToday: ", dateToday);
+                    const prospectiveDateTime = new Date(value + "T" + reservation_time);
+                    const prospectiveYear = prospectiveDateTime.getUTCFullYear();
+                    const currentYear = today.getUTCFullYear();
+                    const prospectiveDate = prospectiveDateTime.getUTCDate();
+                    const currentDate = today.getUTCDate();
 
-                    if (dateInQuestion < dateToday){
-                        setReservationsError({message: "Please select a valid date"});
-                        return false;
-                    }else if (dateInQuestion.getDay() === 1){
-                        setReservationsError({message: "The restaurant is closed on Tuesdays. Please select a different day"})
+                    if (prospectiveDate < currentDate && prospectiveYear <= currentYear){
+                        setReservationsError({
+                            message: "Please select a date in the future"
+                        })
                         return false;
                     }
+
                     break;
                 case "reservation_time":
                     const timeInQuestion = new Date(reservation_date + " " + value);
@@ -154,7 +134,7 @@ export default function Reservations(){
                         if (mnParsed[n].match(/[0-9]/)) rawMobile += mnParsed[n];
                     };
                     // 10 numbers is the area code + phone number; 11 would be with the country code
-                    if (rawMobile.length < 10 || rawMobile.length > 11){
+                    if (rawMobile.length < 7 || rawMobile.length > 11){
                         setReservationsError({message: "Please input a valid phone number"});
                         return false;
                     }
@@ -217,13 +197,13 @@ export default function Reservations(){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="people">Qty of Guests</label>
-                                <input name="people" id="people" className="form-control" onChange={setValues} type="number" defaultValue={1}></input>
+                                <input name="people" id="people" className="form-control" onChange={setValues} type="number" defaultValue={people}></input>
                             </div>
                         </div>
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="phone">Phone</label>
-                                <input name="mobile_number" id="mobile_number" className="form-control" placeholder={mobile_number} type="tel" onChange={setValues} defaultValue="555-5555" required />
+                                <input name="mobile_number" id="mobile_number" className="form-control" placeholder={mobile_number} type="tel" onChange={setValues} defaultValue={mobile_number} required />
                             </div>
                         </div>
                     </div>

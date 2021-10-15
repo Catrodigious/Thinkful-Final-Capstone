@@ -1,4 +1,4 @@
-const reservationsData = require("../migrations/fixtures/reservations");
+const reservationsData = require("../fixtures/00-reservations-data");
 
 exports.seed = function (knex) {
   return knex.raw("TRUNCATE TABLE reservations RESTART IDENTITY CASCADE")
