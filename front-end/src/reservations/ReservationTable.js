@@ -16,11 +16,10 @@ export default function ReservationsTable({reservations}){
     criteriaDisplay.push("Table");
 
 
-    const reservationRows = (reservation) => {
-        const allRows = criteriaKeys.reduce((rows, key)=>{
-            rows.push(<td>{reservation[key]}</td>);
-            return rows;
-        }, []);
+    const ReservationRows = ({reservation}) => {
+        const allRows = criteriaKeys.map((key, index)=>{
+            return (<td key={index}>{reservation[key]}</td>);
+        });
 
         return (
             <tr>
@@ -34,26 +33,26 @@ export default function ReservationsTable({reservations}){
         )
     }
 
-    const noReservations = () => {
+    const NoReservations = () => {
         return (
             <h1>No reservations booked for this day...</h1>
         )
     }
 
-    const reservationsTable = () => {
+    const ReservationsTable = () => {
         return (
         <table className="table">
         <thead>
         <tr>
-            {criteriaDisplay.map((info)=>{
-            return <th scope="col">{info}</th>
+            {criteriaDisplay.map((info, index)=>{
+            return <th scope="col" key={index}>{info}</th>
             })}
         </tr>
         </thead>
         <tbody>
-        {reservations.map((reservation) => {
-            return reservationRows(reservation);
-        })}
+        {reservations.map((reservation, key) =>
+            <ReservationRows reservation={reservation} key={key}  />
+        )}
         </tbody>
     </table>
         )
@@ -64,7 +63,7 @@ export default function ReservationsTable({reservations}){
             <div className="col-12">
             <div className="card">
                 <div className="card-body">
-                    {reservations ? reservationsTable() : noReservations()}
+                    {reservations ? <ReservationsTable /> : <NoReservations />}
                 </div>
             </div>
             </div>

@@ -4,17 +4,15 @@ import { listTables, getReservationById, updateTable } from "../utils/api";
 import { useParams, useHistory} from "react-router-dom";
 
 
-export default function ReservationSeat({date}){
+export default function ReservationSeat({date, tables, tablesError, loadDashboard}){
     const [tableAssignmentError, setTableAssignmentError] = useState(null);
-    const [selectedTable, setSelectedTable] = useState({});
-    const [tables, setTables] = useState([]);
+    const [selectedTable, setSelectedTable] = useState(0);
     const { reservation_id } = useParams();
     const [reservationInfo, setReservationInfo] = useState({});
     const history = useHistory();
 
-    function loadReservations() {
+    function loadReservation() {
         const abortController = new AbortController();
-    
         getReservationById(reservation_id, abortController.signal)
         .then(setReservationInfo)
         .catch((err)=>setReservationInfo({message: err}));
@@ -22,58 +20,42 @@ export default function ReservationSeat({date}){
         return () => abortController.abort();
     }
 
-    function loadTables() {
-        const abortController = new AbortController();
-        console.log("reservationInfo: ", reservationInfo);
-        if (reservationInfo){
-            console.log("reservationInfo: ", reservationInfo.people);
-        
-            listTables({availability: "free"}, abortController.signal)
-            .then((data)=>{
-                setTables(data);
-                // sets table default
-                setSelectedTable(data[0]);
-            })
-            .catch((err)=>setTableAssignmentError({message: err}));
+    useEffect(loadReservation, []);
 
-        }
-        return () => abortController.abort();
-    }
-
-    useEffect(loadReservations, []);
-    useEffect(loadTables, [reservationInfo])
-
+    console.log("selectedTable: ", selectedTable);
 
     const handleTableAssignmentSubmit = (evt) => {
         evt.preventDefault();
-
-        if (reservation_id && selectedTable.availability == "free"){
-            const requestBody = {table_id: selectedTable.table_id, reservation_id, availability: "occupied"};
+        if (tables){
+            const requestBody = {table_id: tables[selectedTable].table_id, reservation_id, availability: "occupied"};
 
             updateTable(requestBody)
-                .then((data)=>{
-                    console.log("table update successful: ", data);
-                    history.push(`/dashboard?date=${reservationInfo.reservation_date}`)
-                    
+                .then(loadDashboard)
+                .then(()=>{
+                    history.push(`/dashboard?date=${reservationInfo.reservation_date}`);
                 })
-                .catch((error)=>setTableAssignmentError({message: error}))
+                .then(loadDashboard)
+                .catch((err)=>{
+                    console.log("error: ", err)
+                    if (err) setTableAssignmentError(err)
+                })
         }
 
-        if (selectedTable.availability !== "free"){
-            console.log(selectedTable);
+        if (tables[selectedTable].availability !== "free"){
+
             setTableAssignmentError({message: "This table is occupied during this time.. please select a different table"})
         }
     }
 
     const onTableSelect = (evt) => {
-        const index = evt.target.value;
-        setSelectedTable(tables[index]);
+        setSelectedTable(evt.target.value);
     }
 
     const tableOptions = () => {
         return tables.map((table, index)=>{
+
             return (
-                <option key={index} value={index} onClick={onTableSelect}>{table.table_name} - {table.capacity}</option>
+                <option key={index} value={index}>{table.table_name} - {table.capacity}</option>
             )
         })
     }
@@ -93,7 +75,7 @@ export default function ReservationSeat({date}){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="table_select">Table Selection</label>
-                                <select name="table_id" className="form-select form-select-lg mb-3" aria-label=".form-select-lg table-select" defaultValue={0} onChange={(evt)=>setSelectedTable(evt.target.value)}>
+                                <select name="table_id" className="form-select form-select-lg mb-3" aria-label=".form-select-lg table-select" defaultValue={0} placeholder="choose table" onChange={onTableSelect}>
                                     {tableOptions()}
                                 </select>
                                 <button type="submit" className="btn btn-primary">Submit</button>
