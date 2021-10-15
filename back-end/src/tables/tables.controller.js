@@ -1,6 +1,6 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const tableService = require("./tables.service");
-const { validateInputs, validateReservationId, validateTableId, validateCapacityAndAvailability } = require("./tables.middleware");
+const { validateInputs, validateReservationId, validateTableId, validateCapacityAndAvailability, checkAvailabilityStatus } = require("./tables.middleware");
 
 async function create(req, res){
     const { params=null } = res.locals;
@@ -35,7 +35,7 @@ async function update(req, res){
 
 async function updateFinishedTable(req, res){
     const { table_id } = req.params;
-
+    
     const data = await tableService.update(null, table_id, "free");
 
     return res.json({data});
@@ -44,7 +44,7 @@ async function updateFinishedTable(req, res){
 module.exports = {
     create: [validateInputs, asyncErrorBoundary(create)],
     list: [asyncErrorBoundary(list)],
-    read: [validateTableId, asyncErrorBoundary(read)],
-    update: [validateTableId, validateReservationId, validateCapacityAndAvailability, asyncErrorBoundary(update)],
-    updateFinishedTable: [validateTableId, asyncErrorBoundary(updateFinishedTable)]
+    read: [asyncErrorBoundary(validateTableId), asyncErrorBoundary(read)],
+    update: [asyncErrorBoundary(validateTableId), validateReservationId, validateCapacityAndAvailability, asyncErrorBoundary(update)],
+    updateFinishedTable: [asyncErrorBoundary(validateTableId), checkAvailabilityStatus, asyncErrorBoundary(updateFinishedTable)]
 }

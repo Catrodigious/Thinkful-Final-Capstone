@@ -1,3 +1,5 @@
+const service = require("./reservations.service");
+
 function validateParams(req, res, next){
     const { data = null } = req.body;
 
@@ -90,7 +92,22 @@ function validateQuery(req, res, next){
     next();
 }
 
+async function validateId(req, res, next){
+    const { reservation_id } = req.params;
+
+    if (!reservation_id) return next({status:404, message: "Please provide a reservation_id"})
+
+    const data = await service.getById(reservation_id);
+
+    if (!data) return next({status: 404, message: `reservation w/reservation_id ${reservation_id} does not exist`});
+    
+    res.locals.data = data;
+    
+    return next();
+}
+
 module.exports = {
     validateParams,
-    validateQuery
+    validateQuery,
+    validateId
 }
