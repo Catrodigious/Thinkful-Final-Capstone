@@ -42,6 +42,7 @@ function validateInputs(req, res, next){
         params.reservation_id = null;
     }else{
         params.reservation_id = data.reservation_id;
+        params.availability = "occupied";
     }
 
     res.locals.params = params;
