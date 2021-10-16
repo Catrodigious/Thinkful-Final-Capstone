@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
 
 import ReservationsTable from "../reservations/ReservationTable";
@@ -14,9 +14,9 @@ import TablesList from "../tables/TablesList";
  */
 function Dashboard({ date, reservations, reservationsError, tables, tablesError, loadDashboard }) {
 
-  
   useEffect(loadDashboard, [date]);
 
+  console.log("Dashboard component date: ", date);
 
   return (
     <main>
@@ -31,10 +31,10 @@ function Dashboard({ date, reservations, reservationsError, tables, tablesError,
         </div>
       <div className="col-8">
           <ReservationsNavigation date={date} />
-          <ReservationsTable reservations={reservations} date={date} />
+          <ReservationsTable reservations={reservations} loadDashboard={loadDashboard} date={date} />
         </div>
         <div className="col-4">
-          <TablesList tables={tables} />
+          <TablesList tables={tables} loadDashboard={loadDashboard} tablesError={tablesError} />
         </div>
         
       </div>

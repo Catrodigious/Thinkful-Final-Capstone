@@ -13,7 +13,7 @@ import { listReservations, listTables } from "../utils/api";
 
 function Routes() {
   const query = useQuery();
-  const date = query.get("date");
+  const date = query.get("date") || today();
   const [reservations, setReservations] = useState([]);
   const [tables, setTables] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
@@ -21,6 +21,7 @@ function Routes() {
 
 
   const loadDashboard = () => {
+    console.log("loadDashboard called...");
     setReservations([]);
     setTables([]);
 
@@ -51,11 +52,11 @@ function Routes() {
         <ReservationForm />
       </Route>
       <Route path="/reservations/:reservation_id/seat">
-        <ReservationSeat date={ date ? date : today() } />
+        <ReservationSeat date={ date } tables={tables} loadDashboard={loadDashboard} tablesError={tablesError} />
       </Route>
       <Route path="/dashboard">
         <Dashboard 
-          date={ date ? date : today() }
+          date={ date }
           reservations={reservations}
           reservationsError={reservationsError}
           tables={tables}

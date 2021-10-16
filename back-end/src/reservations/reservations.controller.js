@@ -1,10 +1,12 @@
 const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
-const { validateParams, validateQuery } = require("./reservations.middleware");
+const { validateParams, validateQuery, validateId, validateStatus } = require("./reservations.middleware");
 
 async function list(req, res) {
   const { date=null } = req.query;
-  const data = await service.list({reservation_date: date});
+  const allReservations = await service.list({reservation_date: date});
+
+  const data = allReservations.filter((reservation)=> reservation.status !== "finished" && reservation.status !== "cancelled");
 
   res.json({data})
 
@@ -19,14 +21,16 @@ async function create(req, res){
   })
 }
 
-async function getById(req, res) {
-  const {reservation_id = null} = req.params;
+function getById(req, res) {
+  const { reservation } = res.locals;
+  res.json({ data: reservation });
+}
 
-  if (!reservation_id){
-    res.status(404).json({message: "Please provide a reservation_id"})
-  }
+async function updateStatus(req, res){
+  const { reservation_id } = res.locals.reservation;
+  const { status } = res.locals;
 
-  const data = await service.getById(reservation_id) || {};
+  const data = await service.updateStatus(reservation_id, status);
 
   res.json({ data });
 }
@@ -34,5 +38,6 @@ async function getById(req, res) {
 module.exports = {
   list: [validateQuery, asyncErrorBoundary(list)],
   create: [validateParams, asyncErrorBoundary(create)],
-  getById: [asyncErrorBoundary(getById)]
+  getById: [asyncErrorBoundary(validateId), getById],
+  updateStatus: [asyncErrorBoundary(validateId), validateStatus, asyncErrorBoundary(updateStatus)]
 };

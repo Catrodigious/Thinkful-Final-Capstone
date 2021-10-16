@@ -5,55 +5,75 @@ export default function ReservationsTable({reservations}){
     const criteria = {
     first_name: "First Name",
     last_name: "Last Name",
+    people: "Guests",
     reservation_time: "Time",
     mobile_number: "Mobile Number",
     created_at: "Created At",
-    updated_at: "Updated At"
+    updated_at: "Updated At",
+    status: "Status"
     }
     let criteriaKeys = Object.keys(criteria);
     let criteriaDisplay = Object.values(criteria);
 
-    criteriaDisplay.push("Table");
+    criteriaDisplay.push("Table Status");
+
+    const onFinishReservation = (evt) => {
+        evt.preventDefault();
+    }
+
+    const SeatButton = ({reservation_id}) => {
+        return (
+            <Link to={`/reservations/${reservation_id}/seat`} href={`/reservations/${reservation_id}/seat`}>
+            <button type="button" className="btn btn-primary">Seat</button>
+        </Link>
+        )
+    }
 
 
-    const reservationRows = (reservation) => {
-        const allRows = criteriaKeys.reduce((rows, key)=>{
-            rows.push(<td>{reservation[key]}</td>);
-            return rows;
-        }, []);
+    // only displays the seat button if the reservation status is "booked"
+    const ReservationRows = ({reservation}) => {
+        const allRows = criteriaKeys.map((key, index) => {
+            if (key === "status"){
+                return (<td key={index} data-reservation-id-status={reservation.reservation_id}>{reservation.status}</td>)
+            }
+            return (<td key={index}>{reservation[key]}</td>);
+        });
 
         return (
             <tr>
                 {allRows}
+                {reservation.status === "booked" ?
                 <td>
-                    <a href={`/reservations/${reservation.reservation_id}/seat`}>
-                        <button type="button" className="btn btn-primary" href={`/reservations/${reservation.reservation_id}/seat`}>Seat</button>
-                    </a>
+                    <SeatButton reservation_id={reservation.reservation_id} />
+                </td> :
+                <td>                    
+                    Currently dining
                 </td>
+                }
             </tr>
         )
     }
 
-    const noReservations = () => {
+    const NoReservations = () => {
         return (
             <h1>No reservations booked for this day...</h1>
         )
     }
 
-    const reservationsTable = () => {
+    const ReservationsTable = () => {
         return (
         <table className="table">
         <thead>
         <tr>
-            {criteriaDisplay.map((info)=>{
-            return <th scope="col">{info}</th>
+            {criteriaDisplay.map((info, index)=>{
+            return <th scope="col" key={index}>{info}</th>
             })}
         </tr>
         </thead>
         <tbody>
-        {reservations.map((reservation) => {
-            return reservationRows(reservation);
-        })}
+        {reservations.map((reservation, key) =>
+            reservation.status !== "finished" && <ReservationRows reservation={reservation} key={key}  />
+        )}
         </tbody>
     </table>
         )
@@ -64,7 +84,7 @@ export default function ReservationsTable({reservations}){
             <div className="col-12">
             <div className="card">
                 <div className="card-body">
-                    {reservations ? reservationsTable() : noReservations()}
+                    {reservations ? <ReservationsTable /> : <NoReservations />}
                 </div>
             </div>
             </div>

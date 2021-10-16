@@ -40,6 +40,9 @@ function validateInputs(req, res, next){
 
     if (!keys.includes("reservation_id")){
         params.reservation_id = null;
+    }else{
+        params.reservation_id = data.reservation_id;
+        params.availability = "occupied";
     }
 
     res.locals.params = params;
@@ -55,14 +58,16 @@ async function validateTableId(req, res, next){
     const data = await tableService.getById(table_id);
 
     if (!data){
-        return errorCallback(400, `Table Id ${table_id} is invalid. Please enter a valid table_id.`, next);
+        return errorCallback(404, `Table Id ${table_id} is invalid. Please enter a valid table_id.`, next);
     }
+
+    res.locals.table = data;
     next();
 }
 
-async function validateReservationId(req, res, next){
+async function validateReservation(req, res, next){
     const { data = null } = req.body;
-    const { table_id } = req.params;
+    const { table_id = null } = req.params;
 
     if (!data) return errorCallback(400, 'data was missing from body', next);
 
@@ -74,6 +79,10 @@ async function validateReservationId(req, res, next){
 
     if (!reservation) return errorCallback(404, `reservation_id: ${reservation_id} does not exist`, next); 
     if (!table) return errorCallback(404, "This table doesn't exist", next);
+
+    if (reservation.status === "seated"){
+        return errorCallback(400, "This reservation is already seated...", next);
+    }
 
     res.locals.reservation = reservation;
     res.locals.table = table;
@@ -94,9 +103,18 @@ function validateCapacityAndAvailability(req, res, next){
     next();
 }
 
+function checkAvailabilityStatus(req, res, next){
+    const { availability = null } = res.locals.table;
+
+    if (!availability || availability === "free") return errorCallback(400, `table is not occupied`, next);
+
+    next();
+}
+
 module.exports = {
     validateInputs,
     validateTableId,
-    validateReservationId,
-    validateCapacityAndAvailability
+    validateReservation,
+    validateCapacityAndAvailability,
+    checkAvailabilityStatus
 }

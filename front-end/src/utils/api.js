@@ -63,17 +63,19 @@ async function fetchJson(url, options, onCancel) {
 
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
+
+  console.log("list reservations params: ", params);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
   return await fetchJson(url, { headers, signal }, [])
-    //  .then(formatReservationDate)
-    //  .then(formatReservationTime);
-    .then((data)=>{
-      const reformattedTime = readableDateAndTime(data);
-      return reformattedTime;
+     .then(formatReservationDate)
+     .then(formatReservationTime);
+    // .then((data)=>{
+    //   const reformattedTime = readableDateAndTime(data);
+    //   return reformattedTime;
 
-    })
+    // })
 //   .then((reservations)=>reservations);
 }
 
@@ -111,6 +113,22 @@ export async function updateTable(params){
   const data = {table_id, reservation_id, availability};
 
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+
+  return await axios.put(url, {data});
+}
+
+export async function resetTable(params){
+  const { table_id } = params;
+  const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
+  return await axios.delete(url);
+}
+
+// params are the status, reservation_id
+export async function updateReservationStatus(params){
+  const { reservationStatus=null, reservation_id=null } = params;
+  const data = {status: reservationStatus};
+  console.log("data: ", data);
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
 
   return await axios.put(url, {data});
 }

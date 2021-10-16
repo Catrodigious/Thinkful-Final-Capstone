@@ -1,3 +1,5 @@
+const service = require("./reservations.service");
+
 function validateParams(req, res, next){
     const { data = null } = req.body;
 
@@ -23,6 +25,13 @@ function validateParams(req, res, next){
                 message: `Request is missing ${requiredParams[n]}`
             })
         }
+    }
+
+    if (data.status && (data.status !== "booked" && data.status !== "cancelled")){
+        return next({
+            status: 400,
+            message: `${data.status} is an invalid reservation status`
+        })
     }
 
     if (typeof data.people != "number" ||
@@ -90,7 +99,46 @@ function validateQuery(req, res, next){
     next();
 }
 
+async function validateId(req, res, next){
+    const { reservation_id } = req.params;
+
+    if (!reservation_id) return next({status:404, message: "Please provide a reservation_id"})
+
+    const data = await service.getById(reservation_id);
+
+    if (!data) return next({status: 404, message: `reservation w/reservation_id ${reservation_id} does not exist`});
+    
+    res.locals.reservation = data;
+    
+    return next();
+}
+
+function validateStatus(req, res, next){
+    const { status = null } = req.body.data;
+    const { reservation = null } = res.locals;
+    console.log("req.body: ", req.body);
+    console.log("status in validateStatus: ", status);
+
+    // theoretically shouldn't run
+    if (!reservation) return next({status: 400, message: "This reservation does not exist"})
+
+    // makes sure a status exists in body.data
+    if (!status) return next({status: 400, message: "Please provide a valid status for this reservation"});
+
+    // status should only either be seated, finished, or cancelled
+    if (status != "booked" && status !== "seated" && status !== "finished" && status !== "cancelled") return next({status: 400, message: `${status} is not a valid status `})
+
+    // makes sure the reservation status is in a state where it can be changed
+    if (reservation.status === "finished" || reservation.status === "cancelled") return next({status: 400, message: "Reservation status cannot be updated once in 'finished' or 'cancelled' state"});
+
+
+    res.locals.status = status;
+    next();
+}
+
 module.exports = {
     validateParams,
-    validateQuery
+    validateQuery,
+    validateId,
+    validateStatus
 }
