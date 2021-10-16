@@ -25,12 +25,11 @@ export default function TablesList({tables, loadDashboard, tablesError}){
                         Can hold {table.capacity} people (table id: {table.table_id})
                     </div>
                     {table.availability === "free" ?
-                        <h1 data-table-id-status={`${table.table_id}`}>{table.availability}</h1>
+                        <span className="badge bg-primary rounded-pill">{table.availability}</span>
                         :
                         <>
                         <button type="button" data-table-id-finish={table.table_id} value={table.table_id} className="btn btn-success" onClick={handleFinishTable}>finish</button>
                         <span className="badge bg-danger rounded-pill">{table.availability}</span>
-                        <h1 data-table-id-status={table.table_id}>{table.availability}</h1>
                         </>
                     }
                     

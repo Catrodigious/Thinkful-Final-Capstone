@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import ErrorAlert from "../layout/ErrorAlert";
-import { listTables, getReservationById, updateTable } from "../utils/api";
+import { getReservationById, updateTable } from "../utils/api";
 import { useParams, useHistory} from "react-router-dom";
 
 
@@ -22,7 +22,6 @@ export default function ReservationSeat({date, tables, tablesError, loadDashboar
 
     useEffect(loadReservation, []);
 
-    console.log("selectedTable: ", selectedTable);
 
     const handleTableAssignmentSubmit = (evt) => {
         evt.preventDefault();

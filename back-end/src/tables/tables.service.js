@@ -27,17 +27,50 @@ function getById(table_id){
         .first()
 }
 
-function update(reservation_id, table_id, availability){
-    return knex(tableName)
-        .where({table_id})
-        .update({reservation_id, availability})
-        .returning("*")
-        .then((result) => result[0]);
-}
+function update(reservation_id, table_id, availability, reservation_status="seated"){
+    return knex.transaction((trx) => {
+        knex(tableName)
+            .where({table_id})
+            .update({reservation_id, availability})
+            .transacting(trx)
+            .then(()=>{
+                return knex("reservations")
+                    .where({reservation_id})
+                    .update({status: reservation_status})
+                    .transacting(trx)
+            })
+            .then(trx.commit)
+            .catch(trx.rollback)
+    })
+    .catch((err)=>{
+        console.log("Error with update transaction in tables.update: ", err);
+    })
+};
+
+function updateFinishedTable(reservation_id, table_id, availability, reservation_status="finished"){
+    return knex.transaction((trx) => {
+        knex(tableName)
+            .where({table_id})
+            .update({reservation_id: null, availability})
+            .transacting(trx)
+            .then(()=>{
+                return knex("reservations")
+                    .where({reservation_id})
+                    .update({status: reservation_status})
+                    .transacting(trx)
+            })
+            .then(trx.commit)
+            .catch(trx.rollback)
+    })
+    .catch((err)=>{
+        console.log("Error with update transaction in tables.update: ", err);
+    })
+};
 
 module.exports = {
     create,
     list,
     getById,
-    update
+    update,
+    updateFinishedTable
 }

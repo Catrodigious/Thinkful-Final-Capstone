@@ -65,7 +65,7 @@ async function validateTableId(req, res, next){
     next();
 }
 
-async function validateReservationId(req, res, next){
+async function validateReservation(req, res, next){
     const { data = null } = req.body;
     const { table_id = null } = req.params;
 
@@ -79,6 +79,10 @@ async function validateReservationId(req, res, next){
 
     if (!reservation) return errorCallback(404, `reservation_id: ${reservation_id} does not exist`, next); 
     if (!table) return errorCallback(404, "This table doesn't exist", next);
+
+    if (reservation.status === "seated"){
+        return errorCallback(400, "This reservation is already seated...", next);
+    }
 
     res.locals.reservation = reservation;
     res.locals.table = table;
@@ -110,7 +114,7 @@ function checkAvailabilityStatus(req, res, next){
 module.exports = {
     validateInputs,
     validateTableId,
-    validateReservationId,
+    validateReservation,
     validateCapacityAndAvailability,
     checkAvailabilityStatus
 }

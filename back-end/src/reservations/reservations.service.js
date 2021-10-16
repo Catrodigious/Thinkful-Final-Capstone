@@ -24,8 +24,17 @@ function getById(reservation_id){
     .catch(()=>{})
 }
 
+function updateStatus(reservation_id, status){
+    return knex(tableName)
+    .where({reservation_id})
+    .update({status})
+    .returning("*")
+    .then((savedData)=>savedData[0]);
+}
+
 module.exports = {
     create,
     list,
-    getById
+    getById,
+    updateStatus
 }

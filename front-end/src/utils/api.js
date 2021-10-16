@@ -122,3 +122,13 @@ export async function resetTable(params){
   const url = new URL(`${API_BASE_URL}/tables/${table_id}/seat`);
   return await axios.delete(url);
 }
+
+// params are the status, reservation_id
+export async function updateReservationStatus(params){
+  const { reservationStatus=null, reservation_id=null } = params;
+  const data = {status: reservationStatus};
+  console.log("data: ", data);
+  const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
+
+  return await axios.put(url, {data});
+}
