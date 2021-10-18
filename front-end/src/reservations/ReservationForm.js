@@ -1,21 +1,13 @@
-import React, { useState } from "react";
-import { createReservation } from "../utils/api";
+import React, { useState, useEffect } from "react";
+import { createReservation, editReservation } from "../utils/api";
 import { useHistory } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
+import { getReservationById } from "../utils/api";
+import { useParams } from "react-router";
 
 import "./Reservations.css";
 
-function initializeGuests(qtyLimit){
-    const guests = [];
-    for (let n=1; n <= qtyLimit; n++){
-        if (n === 1) guests.push(`${n} guest`)
-        else guests.push(`${n} guests`)
-    }
-    return guests;
-}
-
-export default function Reservations(){
-    const guests = initializeGuests(6);
+export default function ReservationForm(){
     const today = new Date();
     const history = useHistory();
 
@@ -25,7 +17,30 @@ export default function Reservations(){
     const [reservation_date, set_reservation_date] = useState(today);
     const [reservation_time, set_reservation_time] = useState("17:30");
     const [mobile_number, set_mobile_number] = useState("");
-    const [people, set_people] = useState(1);
+    const [people, set_people] = useState(null);
+
+    // particular to edit page
+    const { reservation_id=null } = useParams();
+    const [existingReservation, setExistingReservation] = useState({})
+
+    const loadReservation = () => {
+        if (!reservation_id) return;
+        
+        getReservationById(reservation_id)
+        .then((reservation) => {
+            const rDate = reservation.reservation_date.split("T")[0];
+            set_first_name(reservation.first_name);
+            set_last_name(reservation.last_name);
+            set_reservation_date(rDate);
+            set_reservation_time(reservation.reservation_time);
+            set_mobile_number(reservation.mobile_number);
+            set_people(reservation.people);
+            setExistingReservation(reservation);
+        })
+        .catch((err)=> console.log('there was an error: ', err));
+    }
+
+    useEffect(loadReservation, []);
 
     const handleNewReservationSubmit = (evt) => {
         evt.preventDefault();
@@ -35,12 +50,22 @@ export default function Reservations(){
         if (validFormInputs(inputs)){
             // people seems to end up being cast as a string; changing it to a number here
             inputs.people = Number(inputs.people);
-
-            createReservation(inputs)
-            .then((feedback)=>{
-                history.push(`/dashboard?date=${reservation_date}`);
-            })
-            .catch(setReservationsError);
+            
+            if (!reservation_id){
+                createReservation(inputs)
+                .then((feedback)=>{
+                    history.push(`/dashboard?date=${reservation_date}`);
+                })
+                .catch(setReservationsError);
+            }else{
+                const updatedReservation = {...existingReservation, ...inputs};
+                editReservation(updatedReservation)
+                .then((feedback)=>{
+                    console.log("updated reservation: ", feedback);
+                    history.push(`/dashboard?date=${reservation_date}`);
+                })
+                .catch(setReservationsError);
+            }
         }else{
             return;
         }
@@ -147,18 +172,11 @@ export default function Reservations(){
         return true;
     }
 
-    const peopleEvt = (evt, qty) => {
-        evt.preventDefault();
-
-        console.log("qty: ", qty);
-        set_people(qty);
-    }
-
     return (
         <div className="row">
             <div className="card">
                 <div className="float-end">
-                <h1>New Reservation</h1>
+                {reservation_id ? <h1>Edit Reservation</h1> : <h1>New Reservation</h1>}
                 </div>
                 <div className="row">
                     <ErrorAlert error={reservationsError} />
@@ -183,7 +201,7 @@ export default function Reservations(){
                         <div className="col-6">
                             <div className="mb-3">
                                 <label htmlFor="reservation_date">Reservation Date</label>
-                                <input name="reservation_date" id="reservation_date" className="form-control" type="date" required placeholder={today} defaultValue={today} onChange={setValues} />
+                                <input name="reservation_date" id="reservation_date" className="form-control" type="date" required placeholder={reservation_date} value={reservation_date} onChange={setValues} />
                             </div>
                         </div>
                         <div className="col-6">

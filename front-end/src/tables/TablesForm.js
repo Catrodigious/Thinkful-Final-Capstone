@@ -32,7 +32,6 @@ export default function TablesForm(){
         }
 
         const tableProps = {table_name, capacity};
-        console.log("tableProps: ", tableProps);
         newTable(tableProps)
             .then((data)=>{
                 history.push('/dashboard');

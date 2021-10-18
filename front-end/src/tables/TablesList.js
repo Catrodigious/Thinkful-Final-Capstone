@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
 import { resetTable } from "../utils/api";
 import { useHistory } from "react-router-dom";
 
 export default function TablesList({tables, loadDashboard, tablesError}){
     const history = useHistory();
+    useEffect(loadDashboard, []);
 
     async function handleFinishTable(evt){
         evt.preventDefault();
@@ -25,11 +26,11 @@ export default function TablesList({tables, loadDashboard, tablesError}){
                         Can hold {table.capacity} people (table id: {table.table_id})
                     </div>
                     {table.availability === "free" ?
-                        <span className="badge bg-primary rounded-pill">{table.availability}</span>
+                        <span className="badge bg-primary rounded-pill" data-table-id-status={table.table_id}>{table.availability}</span>
                         :
                         <>
                         <button type="button" data-table-id-finish={table.table_id} value={table.table_id} className="btn btn-success" onClick={handleFinishTable}>finish</button>
-                        <span className="badge bg-danger rounded-pill">{table.availability}</span>
+                        <span className="badge bg-danger rounded-pill" data-table-id-status={table.table_id}>{table.availability}</span>
                         </>
                     }
                     

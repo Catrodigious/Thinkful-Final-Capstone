@@ -20,7 +20,7 @@ export default function ReservationSeat({date, tables, tablesError, loadDashboar
         return () => abortController.abort();
     }
 
-    useEffect(loadReservation, []);
+    useEffect(loadReservation, [reservation_id]);
 
 
     const handleTableAssignmentSubmit = (evt) => {
@@ -35,7 +35,6 @@ export default function ReservationSeat({date, tables, tablesError, loadDashboar
                 })
                 .then(loadDashboard)
                 .catch((err)=>{
-                    console.log("error: ", err)
                     if (err) setTableAssignmentError(err)
                 })
         }

@@ -62,7 +62,6 @@ async function fetchJson(url, options, onCancel) {
 export async function listReservations(params, signal) {
   const url = new URL(`${API_BASE_URL}/reservations`);
 
-  console.log("list reservations params: ", params);
   Object.entries(params).forEach(([key, value]) =>
     url.searchParams.append(key, value.toString())
   );
@@ -123,9 +122,8 @@ export async function resetTable(params){
 
 // params are the status, reservation_id
 export async function updateReservationStatus(params){
-  const { reservationStatus=null, reservation_id=null } = params;
-  const data = {status: reservationStatus};
-  console.log("data: ", data);
+  const { status=null, reservation_id=null } = params;
+  const data = {status};
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
 
   return await axios.put(url, {data});
@@ -135,4 +133,11 @@ export async function search(mobile_number){
   const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${mobile_number}`);
   
   return axios.get(url);
+}
+
+export async function editReservation(params){
+  const { reservation_id } = params;
+  const url = `${API_BASE_URL}/reservations/${reservation_id}`;
+
+  return await axios.put(url, {data: params});
 }

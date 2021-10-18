@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import SearchForm from "./SearchForm";
 import ReservationsTable from "../reservations/ReservationTable";
 
-export default function Search(){
+export default function Search({loadDashboard}){
     const [ reservations, setReservations ] = useState([]);
-    const [ noReservations, setNoReservations ] = useState(null);
+    const [ findClicked, setFindClicked ] = useState(false);
 
     return (
         <div>
-            <SearchForm setReservations={setReservations} setNoReservations={setNoReservations} />
-            <ReservationsTable reservations={reservations} isSearchTable={true} />
+            <SearchForm setReservations={setReservations} setFindClicked={setFindClicked} />
+            <ReservationsTable reservations={reservations} isSearchTable={true} findClicked={findClicked} loadDashboard={loadDashboard} />
         </div>
     )
 }

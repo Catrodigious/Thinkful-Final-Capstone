@@ -9,6 +9,7 @@ import ReservationForm from "../reservations/ReservationForm";
 import TablesForm from "../tables/TablesForm";
 import ReservationSeat from "../reservations/ReservationSeat";
 import Search from "../search/Search";
+import ReservationEdit from "../reservations/ReservationEdit";
 
 import { listReservations, listTables } from "../utils/api";
 
@@ -22,7 +23,6 @@ function Routes() {
 
 
   const loadDashboard = () => {
-    console.log("loadDashboard called...");
     setReservations([]);
     setTables([]);
 
@@ -47,7 +47,7 @@ function Routes() {
   return (
     <Switch>
       <Route path="/search">
-        <Search />
+        <Search loadDashboard={loadDashboard} />
       </Route>
       <Route path="/tables/new">
         <TablesForm />
@@ -57,6 +57,9 @@ function Routes() {
       </Route>
       <Route path="/reservations/:reservation_id/seat">
         <ReservationSeat date={ date } tables={tables} loadDashboard={loadDashboard} tablesError={tablesError} />
+      </Route>
+      <Route path="/reservations/:reservation_id/edit">
+        <ReservationForm />
       </Route>
       <Route path="/dashboard">
         <Dashboard 

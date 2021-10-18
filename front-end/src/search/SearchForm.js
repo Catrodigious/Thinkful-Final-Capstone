@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { search } from "../utils/api";
 
-export default function SearchForm({setReservations}){
+export default function SearchForm({setReservations, setFindClicked}){
     const [mobileNumber, setMobileNumber] = useState("");
 
     const onSearch = (evt) => {
         evt.preventDefault();
+        
+        setFindClicked(true);
 
         search(mobileNumber)
         .then(({data})=>{

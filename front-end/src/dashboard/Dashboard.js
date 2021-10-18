@@ -16,8 +16,6 @@ function Dashboard({ date, reservations, reservationsError, tables, tablesError,
 
   useEffect(loadDashboard, [date]);
 
-  console.log("Dashboard component date: ", date);
-
   return (
     <main>
 
@@ -31,7 +29,7 @@ function Dashboard({ date, reservations, reservationsError, tables, tablesError,
         </div>
       <div className="col-8">
           <ReservationsNavigation date={date} />
-          <ReservationsTable reservations={reservations} loadDashboard={loadDashboard} date={date} />
+          <ReservationsTable reservations={reservations} isSearchTable={false} loadDashboard={loadDashboard} />
         </div>
         <div className="col-4">
           <TablesList tables={tables} loadDashboard={loadDashboard} tablesError={tablesError} />

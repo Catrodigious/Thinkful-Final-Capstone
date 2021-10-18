@@ -13,7 +13,9 @@ router.route("/:reservation_id/status")
     .all(methodNotAllowed);
 
 router.route("/:reservation_id")
-    .get(controller.getById);
+    .get(controller.getById)
+    .put(controller.editReservation)
+    .all(methodNotAllowed);
 
 router.route("/")
     .get(controller.list)
