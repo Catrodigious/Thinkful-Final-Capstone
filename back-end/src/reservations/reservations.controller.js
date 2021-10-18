@@ -3,13 +3,18 @@ const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const { validateParams, validateQuery, validateId, validateStatus } = require("./reservations.middleware");
 
 async function list(req, res) {
-  const { date=null } = req.query;
-  const allReservations = await service.list({reservation_date: date});
+  const { date=null, mobile_number=null } = req.query;
 
-  const data = allReservations.filter((reservation)=> reservation.status !== "finished" && reservation.status !== "cancelled");
+  if (date){
+    const allReservations = await service.list({reservation_date: date});
+    const data = allReservations.filter((reservation) => reservation.status !== "finished" && reservation.status !== "cancelled");
 
-  res.json({data})
+    res.json({ data });
+  }else if (mobile_number){
+    const data = await service.search(mobile_number);
 
+    res.json({ data });
+  }
 }
 
 async function create(req, res){
@@ -23,6 +28,7 @@ async function create(req, res){
 
 function getById(req, res) {
   const { reservation } = res.locals;
+
   res.json({ data: reservation });
 }
 
