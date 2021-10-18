@@ -10,7 +10,8 @@ function validateParams(req, res, next){
         "last_name",
         "reservation_date",
         "reservation_time",
-        "mobile_number"
+        "mobile_number",
+        "people"
     ]
 
     const givenParams = Object.keys(data);
@@ -77,8 +78,8 @@ function validateParams(req, res, next){
             message: "The restaurant opens at 10:30am and closes at 10:30pm. Please select a time between 10:30am and 9:30pm"
         })
     }
-
-    if (prospectiveDate.getUTCDay() < today.getUTCDay() && prospectiveDate.getUTCFullYear() <= today.getUTCFullYear()){
+    
+    if (prospectiveDate.getUTCDate() < today.getUTCDate() && prospectiveDate.getUTCFullYear() <= today.getUTCFullYear()){
         return next({
             status: 400,
             message: "Please schedule your reservation for a date/time in the future"
@@ -121,8 +122,6 @@ async function validateId(req, res, next){
 function validateStatus(req, res, next){
     const { status = null } = req.body.data;
     const { reservation = null } = res.locals;
-    console.log("req.body: ", req.body);
-    console.log("status in validateStatus: ", status);
 
     // theoretically shouldn't run
     if (!reservation) return next({status: 400, message: "This reservation does not exist"})

@@ -67,10 +67,17 @@ function updateFinishedTable(reservation_id, table_id, availability, reservation
     })
 };
 
+function getByReservationId(reservation_id){
+    return knex(tableName)
+        .where({reservation_id})
+        .then((result)=>result[0]);
+}
+
 module.exports = {
     create,
     list,
     getById,
     update,
-    updateFinishedTable
+    updateFinishedTable,
+    getByReservationId
 }

@@ -1,7 +1,8 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import {SeatButton, EditButton, CancelButton} from "../buttons/Buttons";
 
-export default function ReservationsTable({reservations, isSearchTable}){
+
+export default function ReservationsTable({reservations, isSearchTable, findClicked, loadDashboard}){
 
     const criteria = {
     first_name: "First Name",
@@ -9,24 +10,17 @@ export default function ReservationsTable({reservations, isSearchTable}){
     people: "Guests",
     reservation_time: "Time",
     mobile_number: "Mobile Number",
-    created_at: "Created At",
-    updated_at: "Updated At",
     status: "Status"
     }
     let criteriaKeys = Object.keys(criteria);
     let criteriaDisplay = Object.values(criteria);
-
+  
     if (!isSearchTable)
         criteriaDisplay.push("Table Status");
+    criteriaDisplay.push("Manage");
 
+    useEffect(loadDashboard, []);
 
-    const SeatButton = ({reservation_id}) => {
-        return (
-            <Link to={`/reservations/${reservation_id}/seat`} href={`/reservations/${reservation_id}/seat`}>
-            <button type="button" className="btn btn-primary">Seat</button>
-        </Link>
-        )
-    }
 
     // only displays the seat button if the reservation status is "booked"
     const ReservationRows = () => {
@@ -45,19 +39,24 @@ export default function ReservationsTable({reservations, isSearchTable}){
                     <tr key={i}>
                         <AllRows />
                         {reservation.status === "booked" ?
-                        <td>
-                            <SeatButton reservation_id={reservation.reservation_id} />
-                        </td> :
-                        <td>                    
-                            Currently dining
-                        </td>
+                        <td><SeatButton reservation_id={reservation.reservation_id} /></td> :
+                        <td>Table assigned</td>
                         }
+                        <td>
+                            {reservation.status === "booked" && <EditButton reservation_id={reservation.reservation_id} />}
+                            { (reservation.status !== "cancelled" && reservation.status !== "finished") && <CancelButton reservation_id={reservation.reservation_id} loadDashboard={loadDashboard} /> }
+                        </td>
+                     
                     </tr>
                 )
             }else{
                 return (
                     <tr key={i}>
                         <AllRows />
+                        <td>
+                            { reservation.status === "booked" && <EditButton reservation_id={reservation.reservation_id} /> }
+                            { (reservation.status !== "cancelled" && reservation.status !== "finished") && <CancelButton reservation_id={reservation.reservation_id} loadDashboard={loadDashboard} /> }
+                        </td>
                     </tr>
                 )
             }
@@ -69,10 +68,12 @@ export default function ReservationsTable({reservations, isSearchTable}){
             return (
                 <h1>No reservations...</h1>
             )
-        }else{
+        }else if (isSearchTable && findClicked){
             return (
                 <h1>No reservations found...</h1>
             )
+        }else{
+            return null;
         }
     }
 
@@ -96,11 +97,9 @@ export default function ReservationsTable({reservations, isSearchTable}){
     return (
         <div className="row">
             <div className="col-12">
-            <div className="card">
-                <div className="card-body">
-                    {reservations.length > 0 ? <ReservationsTable /> : <NoReservations />}
-                </div>
-            </div>
+
+                {reservations.length > 0 ? <ReservationsTable /> : <NoReservations />}
+
             </div>
         </div>
     )

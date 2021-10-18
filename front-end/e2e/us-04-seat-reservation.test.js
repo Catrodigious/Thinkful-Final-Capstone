@@ -195,11 +195,6 @@ describe("US-04 - Seat reservation - E2E", () => {
       });
 
       expect(page.url()).toContain("/dashboard");
-
-      // remove what's below
-      console.log("page.url(): ", page.url());
-      // remove what's above
-
       expect(page).toMatch(/occupied/i);
     });
 
