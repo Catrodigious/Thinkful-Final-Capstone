@@ -1,5 +1,44 @@
 # Capstone: Restaurant Reservation System
 
+## Live application URL
+`https://cc-final-capstone-client.herokuapp.com/`
+
+<br>
+
+## Technology Used
+### Frontend
+- ReactJS
+
+### Backend
+- Postgres (knex)
+- NodeJS
+- Express
+
+<br>
+
+## Summary
+A restaurant schedule management application that allows a restaurant manager to create/document tables and reservations. It provides the ability to filter reservations by phone number. 
+
+<br>
+
+## Installation Instructions
+
+### Frontend
+- `cd` into `Thinkful-Final-Capstone/front-end`
+  - run `npm install`
+  - run `npm start` to start the application
+
+### Backend
+- `cd` into `Thinkful-Final-Capstone/back-end`
+  - run `npm install`
+  - run `npm start` to start the application
+
+<br>
+
+<hr>
+
+<br>
+
 > You have been hired as a full stack developer at _Periodic Tables_, a startup that is creating a reservation system for fine dining restaurants.
 > The software is used only by restaurant personnel when a customer calls to request a reservation.
 > At this point, the customers will not access the system online.
