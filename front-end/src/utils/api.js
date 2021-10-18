@@ -4,8 +4,6 @@
  */
 import formatReservationDate from "./format-reservation-date";
 import formatReservationTime from "./format-reservation-date";
-import { readableDateAndTime } from "./readable-date-time";
-
 import axios from 'axios';
 
 const API_BASE_URL =
@@ -131,4 +129,10 @@ export async function updateReservationStatus(params){
   const url = `${API_BASE_URL}/reservations/${reservation_id}/status`;
 
   return await axios.put(url, {data});
+}
+
+export async function search(mobile_number){
+  const url = new URL(`${API_BASE_URL}/reservations?mobile_number=${mobile_number}`);
+  
+  return axios.get(url);
 }
