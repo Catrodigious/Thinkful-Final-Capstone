@@ -89,12 +89,17 @@ function validateParams(req, res, next){
 }
 
 function validateQuery(req, res, next){
-    const { date=null } = req.query;
+    const { query } = req;
+    const allowedProperties = ["mobile_number", "date"];
 
-    if (!date) return next({
-        status: 400,
-        message: "Please provide a date query"
-    })
+    for (const property in query){
+        if (!allowedProperties.includes(property)){
+            return next({
+                status: 400,
+                message: `${property} is not a valid query -- please provide either a date or a mobile_number`
+            });
+        }
+    }
 
     next();
 }

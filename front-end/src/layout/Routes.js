@@ -8,6 +8,7 @@ import useQuery from "../utils/useQuery";
 import ReservationForm from "../reservations/ReservationForm";
 import TablesForm from "../tables/TablesForm";
 import ReservationSeat from "../reservations/ReservationSeat";
+import Search from "../search/Search";
 
 import { listReservations, listTables } from "../utils/api";
 
@@ -45,6 +46,9 @@ function Routes() {
 
   return (
     <Switch>
+      <Route path="/search">
+        <Search />
+      </Route>
       <Route path="/tables/new">
         <TablesForm />
       </Route>
