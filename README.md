@@ -83,8 +83,7 @@ Expanding the restaurant? Create new tables by selecting the 'New Table' option 
     | `reservation_time` | `str` |
     | `mobile_number` | `str` |
 
-<br>
-<hr>
+
 
 
 ## Get Reservations by Date
@@ -92,8 +91,7 @@ Expanding the restaurant? Create new tables by selecting the 'New Table' option 
 
 Returns reservations for a particular date
 
-<br>
-<hr>
+
 
 ## Get Reservations by Id
  `/reservations/:reservation_id`
@@ -113,24 +111,21 @@ Returns reservations for a particular date
     | `reservation_time` | `str` |
     | `mobile_number` | `str` |
 
-<br>
-<hr>
+
 
 ## Get Reservation Status
 **GET** `/reservations/:reservation_id/status`
 
 Returns a status of [ `booked, seated, finished, cancelled` ] for the particular reservation
 
-<br>
-<hr>
+
 
 ## Get Tables
 - **GET** `/tables`
 
 Returns the available tables.
 
-<br>
-<hr>
+
 
 ## Create Table
 - **POST** `/tables`
@@ -143,8 +138,7 @@ Creates a table to be listed in the table list.
     | `table_name` | `str` |
     | `capacity` | `int` |
 
-<br>
-<hr>
+
 
 ## Update Table Status
 - **PUT** `/tables/:table_id/seat`
@@ -156,8 +150,7 @@ Sets table status to 'occupied' and ties a `restaurant_id` to it.
     | ---------- | ---------- |
     | `reservation_id` | `int` |
 
-<br>
-<hr>
+
 
 ## Finish Table
 - **DELETE** `/tables/:table_id/seat`
