@@ -1,6 +1,5 @@
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const tableService = require("./tables.service");
-const reservationService = require("../reservations/reservations.service");
 const { validateInputs, validateReservation, validateTableId, validateCapacityAndAvailability, checkAvailabilityStatus } = require("./tables.middleware");
 
 async function create(req, res){
