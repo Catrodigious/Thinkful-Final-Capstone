@@ -6,7 +6,6 @@
 ## Kanban Board During Development
 `https://github.com/Catrodigious/Thinkful-Final-Capstone/projects/2`
 
-<br>
 
 ## Technology Used
 ### Frontend
@@ -47,7 +46,7 @@ Users can also create tables and assign capacity to reflect the tables in the re
 ## Creating A Reservation
 Creating a reservations is done by clicking 'New Reservation' on the navigation bar. This requires the customer's first name, last name, reservation date, reservation time, quantity of guests, and phone number.
 
-![newReservation](./images/newReservation.png)
+![newReservation](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images//newReservation.PNG)
 
 
 ## Managing Reservations
@@ -57,17 +56,17 @@ The dashboard by default will list the reservations for today. Use the previous 
 
 The tables and their availability are listed in the list on the on the far right of the page.
 
-![dashboard](./images/dashboard.png)
+![dashboard](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images//dashboard.PNG)
 
 ## Searching for a Specific Reservation
 Users can search for a particular reservation by the mobile number associated with the reservation. This can be done by clicking the 'Search' option in the left-hand navigation.
 
-![searchByMobile](./images/searchByMobile.png)
+![searchByMobile](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images//searchByMobile.PNG)
 
 ## Managing Tables
 Expanding the restaurant? Create new tables by selecting the 'New Table' option in the left-hand navigation.
 
-![newTable](./images/newTable.png)
+![newTable](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images//newTable.PNG)
 
 
 # API
