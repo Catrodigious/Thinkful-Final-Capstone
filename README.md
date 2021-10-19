@@ -1,10 +1,10 @@
 # Capstone: Restaurant Reservation System
 
 ## Live application URL
-`https:/cc-final-capstone-client.herokuapp.com/`
+`https://cc-final-capstone-client.herokuapp.com/`
 
 ## Kanban Board During Development
-`https:/github.com/Catrodigious/Thinkful-Final-Capstone/projects/2`
+`https://github.com/Catrodigious/Thinkful-Final-Capstone/projects/2`
 
 
 ## Technology Used
@@ -46,7 +46,7 @@ Users can also create tables and assign capacity to reflect the tables in the re
 ## Creating A Reservation
 Creating a reservations is done by clicking 'New Reservation' on the navigation bar. This requires the customer's first name, last name, reservation date, reservation time, quantity of guests, and phone number.
 
-![newReservation](https:/github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newReservation.PNG)
+![newReservation](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newReservation.PNG)
 
 
 ## Managing Reservations
@@ -56,17 +56,17 @@ The dashboard by default will list the reservations for today. Use the previous 
 
 The tables and their availability are listed in the list on the on the far right of the page.
 
-![dashboard](https:/github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/dashboard.PNG)
+![dashboard](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/dashboard.PNG)
 
 ## Searching for a Specific Reservation
 Users can search for a particular reservation by the mobile number associated with the reservation. This can be done by clicking the 'Search' option in the left-hand navigation.
 
-![searchByMobile](https:/github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/searchByMobile.PNG)
+![searchByMobile](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/searchByMobile.PNG)
 
 ## Managing Tables
 Expanding the restaurant? Create new tables by selecting the 'New Table' option in the left-hand navigation.
 
-![newTable](https:/github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newTable.PNG)
+![newTable](https://github.com/Catrodigious/Thinkful-Final-Capstone/blob/main/images/newTable.PNG)
 
 
 # API
