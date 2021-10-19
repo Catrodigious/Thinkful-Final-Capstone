@@ -5,9 +5,9 @@ function errorCallback(status, message, next){
     return next({status: status, message: message});
 }
 
+// checks for availability, table_name, capacity, and reservation_id
 function validateInputs(req, res, next){
     const requiredFields = ["table_name", "capacity"];
-    const optionalFields = ["availability", "reservation_id"];
     const { data=null } = req.body;
     
     if (!data) return errorCallback(400, "Please provide name, capacity, and availability fields in your request", next);
@@ -50,6 +50,7 @@ function validateInputs(req, res, next){
     next();
 }
 
+// makes sure table exists in the database
 async function validateTableId(req, res, next){
     const { table_id } = req.params;
 
@@ -65,6 +66,7 @@ async function validateTableId(req, res, next){
     next();
 }
 
+// makes sure reservation exists in the database
 async function validateReservation(req, res, next){
     const { data = null } = req.body;
     const { table_id = null } = req.params;
@@ -103,6 +105,8 @@ function validateCapacityAndAvailability(req, res, next){
     next();
 }
 
+// particular to "finishing" a table - makes sure that the table is occupied before setting its status to "free",
+// otherwise, return an error
 function checkAvailabilityStatus(req, res, next){
     const { availability = null } = res.locals.table;
 

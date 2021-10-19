@@ -68,6 +68,8 @@ async function updateStatus(req, res) {
   res.json({ data });
 }
 
+// stores params into new obj toModify to make sure there aren't extra params being passed
+// that might be saved to the database
 async function editReservation(req, res) {
   const params = req.body.data;
   const { reservation_id } = params;
