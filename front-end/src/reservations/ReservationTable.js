@@ -1,7 +1,9 @@
 import React, { useEffect } from "react";
 import {SeatButton, EditButton, CancelButton} from "../buttons/Buttons";
 
-
+// used in both the dashboard and the search pages
+// isSearchTable and findClicked are particular to the search page
+// only displaying certain pieces of data/information accordingly
 export default function ReservationsTable({reservations, isSearchTable, findClicked, loadDashboard}){
 
     const criteria = {

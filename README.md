@@ -3,6 +3,9 @@
 ## Live application URL
 `https://cc-final-capstone-client.herokuapp.com/`
 
+## Kanban Board During Development
+`https://github.com/Catrodigious/Thinkful-Final-Capstone/projects/2`
+
 <br>
 
 ## Technology Used

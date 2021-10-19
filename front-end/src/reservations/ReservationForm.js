@@ -40,6 +40,7 @@ export default function ReservationForm() {
       .catch((err) => console.log("there was an error: ", err));
   };
 
+  // refreshes data on reservations upon page load
   useEffect(loadReservation, []);
 
   const handleNewReservationSubmit = (evt) => {
@@ -77,6 +78,7 @@ export default function ReservationForm() {
     }
   };
 
+  // sets the values dynamically as the user enters them
   const setValues = (evt) => {
     switch (evt.target.id) {
       case "first_name":
@@ -101,6 +103,8 @@ export default function ReservationForm() {
     }
   };
 
+  // if any of the inputs are incorrect, return false and display error
+  // if all inputs are correct, return true and allow posting of data
   const validFormInputs = (inputs) => {
     const keys = Object.keys(inputs);
 

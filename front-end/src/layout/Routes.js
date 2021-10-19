@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 
 import { Redirect, Route, Switch } from "react-router-dom";
 import Dashboard from "../dashboard/Dashboard";
@@ -9,10 +9,10 @@ import ReservationForm from "../reservations/ReservationForm";
 import TablesForm from "../tables/TablesForm";
 import ReservationSeat from "../reservations/ReservationSeat";
 import Search from "../search/Search";
-import ReservationEdit from "../reservations/ReservationEdit";
-
 import { listReservations, listTables } from "../utils/api";
 
+// passes loadDashboard to any pages that display information (non-forms)
+// in order to refresh reservation and table data whenever there are any changes made to reservations and tables
 function Routes() {
   const query = useQuery();
   const date = query.get("date") || today();
@@ -21,17 +21,16 @@ function Routes() {
   const [reservationsError, setReservationsError] = useState(null);
   const [tablesError, setTablesError] = useState(null);
 
-
   const loadDashboard = () => {
     setReservations([]);
     setTables([]);
 
     setReservationsError(null);
     setTablesError(null);
-    
+
     const abortController = new AbortController();
 
-    listReservations({date}, abortController.signal)
+    listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
 
@@ -40,7 +39,7 @@ function Routes() {
       .catch(setTablesError);
 
     return () => abortController.abort();
-  }
+  };
 
   useEffect(loadDashboard, [date]);
 
@@ -56,20 +55,25 @@ function Routes() {
         <ReservationForm />
       </Route>
       <Route path="/reservations/:reservation_id/seat">
-        <ReservationSeat date={ date } tables={tables} loadDashboard={loadDashboard} tablesError={tablesError} />
+        <ReservationSeat
+          date={date}
+          tables={tables}
+          loadDashboard={loadDashboard}
+          tablesError={tablesError}
+        />
       </Route>
       <Route path="/reservations/:reservation_id/edit">
         <ReservationForm />
       </Route>
       <Route path="/dashboard">
-        <Dashboard 
-          date={ date }
+        <Dashboard
+          date={date}
           reservations={reservations}
           reservationsError={reservationsError}
           tables={tables}
           tablesError={tablesError}
           loadDashboard={loadDashboard}
-         />
+        />
       </Route>
       <Route exact={true} path="/">
         <Redirect to={"/dashboard"} />
