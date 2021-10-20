@@ -1,4 +1,6 @@
 .side-bar {
   background-color: #393a44;
-  min-width: 200px;
+  width: 100%;
+  padding: 0px;
+  margin: 0px;
 }

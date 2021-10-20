@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {SeatButton, EditButton, CancelButton} from "../buttons/Buttons";
+import "./Reservations.css";
 
 // used in both the dashboard and the search pages
 // isSearchTable and findClicked are particular to the search page
@@ -9,7 +10,7 @@ export default function ReservationsTable({reservations, isSearchTable, findClic
     const criteria = {
     first_name: "First Name",
     last_name: "Last Name",
-    people: "Guests",
+    people: "Qty",
     reservation_time: "Time",
     mobile_number: "Mobile Number",
     status: "Status"
@@ -97,8 +98,8 @@ export default function ReservationsTable({reservations, isSearchTable, findClic
     }
 
     return (
-        <div className="row">
-            <div className="col-12">
+        <div className="row-fluid">
+            <div className="col-12 reservations-table">
 
                 {reservations.length > 0 ? <ReservationsTable /> : <NoReservations />}
 

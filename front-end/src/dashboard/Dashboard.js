@@ -5,6 +5,7 @@ import ReservationsTable from "../reservations/ReservationTable";
 import ReservationsNavigation from "../reservations/ReservationNavigation";
 
 import TablesList from "../tables/TablesList";
+import "./Dashboard.css";
 
 /**
  * Defines the dashboard page.
@@ -25,27 +26,31 @@ function Dashboard({
 
   return (
     <main>
-      {reservationsError && <ErrorAlert error={reservationsError} />}
-      {tablesError && <ErrorAlert error={tablesError} />}
+      <div>
+        {reservationsError && <ErrorAlert error={reservationsError} />}
+        {tablesError && <ErrorAlert error={tablesError} />}
 
-      <div className="row">
-        <div className="col-12">
-          <h1>Dashboard</h1>
+        <div className="row-fluid">
+          <div className="col-12">
+            <h1>Dashboard</h1>
+          </div>
         </div>
-        <div className="col-8">
-          <ReservationsNavigation date={date} />
-          <ReservationsTable
-            reservations={reservations}
-            isSearchTable={false}
-            loadDashboard={loadDashboard}
-          />
-        </div>
-        <div className="col-4">
-          <TablesList
-            tables={tables}
-            loadDashboard={loadDashboard}
-            tablesError={tablesError}
-          />
+        <div className="row">
+          <div className="col-md-8 col-lg-8">
+            <ReservationsNavigation date={date} />
+            <ReservationsTable
+              reservations={reservations}
+              isSearchTable={false}
+              loadDashboard={loadDashboard}
+            />
+          </div>
+          <div className="col-xs-12 col-md-4 col-lg-4">
+            <TablesList
+              tables={tables}
+              loadDashboard={loadDashboard}
+              tablesError={tablesError}
+            />
+          </div>
         </div>
       </div>
     </main>

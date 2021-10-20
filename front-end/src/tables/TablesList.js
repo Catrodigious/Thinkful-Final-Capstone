@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { resetTable } from "../utils/api";
+import "./tablesList.css";
 
 // displays the tables data in a list off to the right of the page
 export default function TablesList({ tables, loadDashboard, tablesError }) {
@@ -22,7 +23,7 @@ export default function TablesList({ tables, loadDashboard, tablesError }) {
   function getListItem(table, index) {
     return (
       <li
-        className="list-group-item d-flex justify-content-between align-items-start"
+        className="list-group-item d-flex justify-content-between align-items-start "
         key={index}
       >
         <div className="ms-2 me-auto">
@@ -62,11 +63,13 @@ export default function TablesList({ tables, loadDashboard, tablesError }) {
   }
 
   return (
-    <div>
-      <h4>Tables List</h4>
-      <ul className="list-group">
-        {tables.map((table, index) => getListItem(table, index))}
-      </ul>
+    <div className="row">
+      <div className="col-12">
+        <h4>Tables List</h4>
+        <ul className="list-group list-full-width">
+          {tables.map((table, index) => getListItem(table, index))}
+        </ul>
+    </div>
     </div>
   );
 }

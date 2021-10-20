@@ -18,7 +18,7 @@ import "./Layout.css";
 function Layout() {
   return (
     <div className="container-fluid">
-      <div className="row w-100">
+      <div className="row">
         <div className="col-md-2 side-bar">
           <Menu />
         </div>

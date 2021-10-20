@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { updateReservationStatus } from "../utils/api";
+import "./Buttons.css";
 
 // redirects user to the reservation seat page
 export function SeatButton({ reservation_id }) {
@@ -9,7 +10,7 @@ export function SeatButton({ reservation_id }) {
       to={`/reservations/${reservation_id}/seat`}
       href={`/reservations/${reservation_id}/seat`}
     >
-      <button type="button" className="btn btn-primary">
+      <button type="button" className="btn btn-primary table-btn manage-btn">
         Seat
       </button>
     </Link>
@@ -22,7 +23,7 @@ export function EditButton({ reservation_id }) {
       to={`/reservations/${reservation_id}/edit`}
       href={`/reservations/${reservation_id}/edit`}
     >
-      <button type="button" className="btn btn-success">
+      <button type="button" className="btn btn-success table-btn manage-btn">
         Edit
       </button>
     </Link>
@@ -50,7 +51,7 @@ export function CancelButton({ reservation_id, loadDashboard }) {
   return (
     <button
       type="button"
-      className="btn btn-danger"
+      className="btn btn-danger table-btn manage-btn"
       data-reservation-id-cancel={reservation_id}
       onClick={onCancel}
     >
